@@ -1,16 +1,15 @@
-const CACHE_NAME = 'coffee-spot-pos-v1';
+const CACHE_NAME = 'coffee-spot-pos-v2';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css',
-  './app.js',
-  './manifest.json',
-  'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..800&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap',
-  'https://cdn.jsdelivr.net/npm/chart.js',
-  'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js'
+  './styles.css?v=2.0',
+  './app.js?v=2.0',
+  './manifest.json'
 ];
 
+// Force immediate activation on install
 self.addEventListener('install', (e) => {
+  self.skipWaiting();
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
@@ -18,10 +17,33 @@ self.addEventListener('install', (e) => {
   );
 });
 
+// Delete old caches on activate and claim clients
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Network-First Strategy for fresh updates
 self.addEventListener('fetch', (e) => {
+  if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then((res) => {
-      return res || fetch(e.request);
-    })
+    fetch(e.request)
+      .then((networkRes) => {
+        if (networkRes && networkRes.status === 200) {
+          const resClone = networkRes.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, resClone));
+        }
+        return networkRes;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
