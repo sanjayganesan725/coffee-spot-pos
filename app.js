@@ -316,6 +316,22 @@ function renderCatalogGrid() {
 function addToCart(item) {
   triggerHaptic();
   playChime('add');
+
+  const isDirect1Tap = $('direct1TapToggle') && $('direct1TapToggle').checked;
+
+  if (isDirect1Tap) {
+    cart = [{
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      qty: 1,
+      icon: item.icon
+    }];
+    renderCart();
+    checkoutCart();
+    return;
+  }
+
   const existing = cart.find(c => c.id === item.id);
   if (existing) {
     existing.qty += 1;
@@ -1418,6 +1434,20 @@ function loadDemoSales() {
 function bindEvents() {
   // Search filter
   $('itemSearch').addEventListener('input', renderCatalogGrid);
+
+  // Direct 1-Tap Toggle
+  const saved1Tap = localStorage.getItem('coffee_pos:direct_1tap_mode') === 'true';
+  if ($('direct1TapToggle')) {
+    $('direct1TapToggle').checked = saved1Tap;
+    $('direct1TapToggle').onchange = (e) => {
+      localStorage.setItem('coffee_pos:direct_1tap_mode', e.target.checked);
+      if (e.target.checked) {
+        showToast('⚡ Direct 1-Tap Print Mode Enabled!');
+      } else {
+        showToast('🛒 Standard Cart Mode Enabled');
+      }
+    };
+  }
 
   // Payment Method selection
   document.querySelectorAll('.btn-pm').forEach(btn => {

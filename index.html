@@ -76,41 +76,7 @@
       <button class="btn-outline" id="loadSampleBtn" title="Fill today with demo sales data">✨ Load Demo Data</button>
     </div>
 
-    <!-- KPI STRIP -->
-    <div class="total-strip">
-      <div class="total-card big">
-        <div class="label">Total Revenue</div>
-        <div class="num" id="dayTotal">₹0.00</div>
-        <div class="sub-label" id="dateSubLabel">Selected Date</div>
-      </div>
-      <div class="total-card">
-        <div class="label">Items Sold</div>
-        <div class="num" id="dayItems">0</div>
-        <div class="sub-label">Total Units</div>
-      </div>
-      <div class="total-card">
-        <div class="label">Transactions</div>
-        <div class="num" id="dayTx">0</div>
-        <div class="sub-label">Bills Issued</div>
-      </div>
-      <div class="total-card">
-        <div class="label">Avg Order Value</div>
-        <div class="num" id="dayAov">₹0</div>
-        <div class="sub-label">Per Sale</div>
-      </div>
-      <div class="total-card danger-card">
-        <div class="label">Pending Debt</div>
-        <div class="num" id="dayDebt" style="color:var(--danger);">₹0.00</div>
-        <div class="sub-label" id="dayDebtCount">0 Unpaid Bills</div>
-      </div>
-      <div class="total-card highlight-card">
-        <div class="label">Top Category</div>
-        <div class="num top-cat-text" id="dayTopCat">—</div>
-        <div class="sub-label" id="dayTopCatShare">0% of revenue</div>
-      </div>
-    </div>
-
-    <!-- MAIN POS WORKSPACE (2 COLUMNS) -->
+    <!-- MAIN POS WORKSPACE (2 COLUMNS AT TOP) -->
     <div class="pos-workspace-grid">
       
       <!-- LEFT COLUMN: QUICK TOUCH GRID & CATALOG -->
@@ -118,9 +84,15 @@
         <!-- Quick Touch Hotkey Bar -->
         <div class="panel pos-panel">
           <div class="panel-header flex-between">
-            <h2>⚡ Quick Touch Billing (Hotkeys 1-0)</h2>
-            <div class="search-box">
-              <input type="text" id="itemSearch" placeholder="🔍 Search menu item..." autocomplete="off">
+            <h2>⚡ Quick Touch Billing</h2>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:700; font-size:0.85rem; background:var(--primary-light); color:var(--primary); padding:6px 12px; border-radius:var(--radius-sm); border:1px solid var(--primary);" title="When enabled, clicking any item instantly prints the bill!">
+                <input type="checkbox" id="direct1TapToggle" style="accent-color:var(--primary); width:16px; height:16px;">
+                ⚡ Direct 1-Tap Print
+              </label>
+              <div class="search-box">
+                <input type="text" id="itemSearch" placeholder="🔍 Search menu item..." autocomplete="off">
+              </div>
             </div>
           </div>
 
@@ -258,6 +230,40 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- KPI SUMMARY DASHBOARD STRIP (MOVED TO BOTTOM) -->
+  <div class="total-strip" style="margin-top:24px;">
+    <div class="total-card big">
+      <div class="label">Total Revenue</div>
+      <div class="num" id="dayTotal">₹0.00</div>
+      <div class="sub-label" id="dateSubLabel">Selected Date</div>
+    </div>
+    <div class="total-card">
+      <div class="label">Items Sold</div>
+      <div class="num" id="dayItems">0</div>
+      <div class="sub-label">Total Units</div>
+    </div>
+    <div class="total-card">
+      <div class="label">Transactions</div>
+      <div class="num" id="dayTx">0</div>
+      <div class="sub-label">Bills Issued</div>
+    </div>
+    <div class="total-card">
+      <div class="label">Avg Order Value</div>
+      <div class="num" id="dayAov">₹0</div>
+      <div class="sub-label">Per Sale</div>
+    </div>
+    <div class="total-card danger-card">
+      <div class="label">Pending Debt</div>
+      <div class="num" id="dayDebt" style="color:var(--danger);">₹0.00</div>
+      <div class="sub-label" id="dayDebtCount">0 Unpaid Bills</div>
+    </div>
+    <div class="total-card highlight-card">
+      <div class="label">Top Category</div>
+      <div class="num top-cat-text" id="dayTopCat">—</div>
+      <div class="sub-label" id="dayTopCatShare">0% of revenue</div>
     </div>
   </div>
 
