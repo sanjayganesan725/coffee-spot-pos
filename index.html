@@ -8,30 +8,30 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Coffee Spot — POS & Billing Machine</title>
   
-  <!-- Manifest & Favicon -->
+  <!-- Web App Manifest & Favicon -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231F5C4F'/><text y='65' x='50' font-size='50' text-anchor='middle'>☕</text></svg>">
   
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Modern & Vintage Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..800&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..800&family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- Chart.js CDN for Analytics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- QRCode.js CDN for live UPI / Receipt QR Code -->
+  <!-- QRCode.js CDN for Live UPI & Receipt QR Code -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 
-  <link rel="stylesheet" href="styles.css?v=2.1">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="wrap">
     
-    <!-- TOP HEADER -->
+    <!-- APP HEADER -->
     <header class="app-header">
       <div class="brand-group">
         <div class="shop-name-row">
-          <h1 class="shop-name" id="shopNameDisplay" title="Click to edit shop name">Coffee Spot</h1>
+          <h1 class="shop-name" id="shopNameDisplay" title="Click to edit store details">Coffee Spot</h1>
           <button class="btn-icon-tiny" id="editShopBtn" title="Edit Store Details">✏️</button>
         </div>
         <div class="shop-tag" id="shopTagDisplay">Gandhigram Rural Institute, Chinnalapatti, Dindigul</div>
@@ -62,12 +62,12 @@
       </div>
     </header>
 
-    <!-- TOP ACTION NAVIGATION BAR -->
+    <!-- ACTION NAVIGATION BAR -->
     <div class="action-bar">
-      <button class="btn-secondary" id="installAppBtn" style="display:none; background:var(--amber); color:var(--ink); font-weight:bold;">📲 Install PWA App</button>
+      <button class="btn-secondary" id="installAppBtn" style="display:none; background:var(--amber); color:var(--ink); font-weight:bold;">📲 Install App</button>
       <button class="btn-secondary" id="openCatalogBtn">⚙️ Manage Catalog</button>
       <button class="btn-secondary" id="openRecentBillsBtn">🧾 Recent Bills</button>
-      <button class="btn-secondary" id="openCustomerLedgerBtn" style="border-color:var(--danger); color:var(--danger); font-weight:bold;">💳 Customer Ledger (Debt Tracker)</button>
+      <button class="btn-secondary" id="openCustomerLedgerBtn" style="border-color:var(--danger); color:var(--danger); font-weight:bold;">💳 Customer Ledger (Khata)</button>
       <button class="btn-secondary" id="openExpensesBtn">💸 Expenses & Labour</button>
       <button class="btn-secondary" id="openReportsBtn">📈 Financial Summaries</button>
       <button class="btn-secondary" id="openAnalyticsBtn">📊 Sales Analytics</button>
@@ -76,18 +76,17 @@
       <button class="btn-outline" id="loadSampleBtn" title="Fill today with demo sales data">✨ Load Demo Data</button>
     </div>
 
-    <!-- MAIN POS WORKSPACE (2 COLUMNS AT TOP) -->
+    <!-- MAIN POS WORKSPACE GRID -->
     <div class="pos-workspace-grid">
       
-      <!-- LEFT COLUMN: QUICK TOUCH GRID & CATALOG -->
+      <!-- LEFT COLUMN: TOUCH GRID & CATALOG -->
       <div class="pos-left">
-        <!-- Quick Touch Hotkey Bar -->
         <div class="panel pos-panel">
           <div class="panel-header flex-between">
             <h2>⚡ Quick Touch Billing</h2>
             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-              <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:700; font-size:0.85rem; background:var(--primary-light); color:var(--primary); padding:6px 12px; border-radius:var(--radius-sm); border:1px solid var(--primary);" title="When enabled, clicking any item instantly prints the bill!">
-                <input type="checkbox" id="direct1TapToggle" style="accent-color:var(--primary); width:16px; height:16px;">
+              <label class="direct-tap-label" title="When enabled, tapping an item prints bill immediately!">
+                <input type="checkbox" id="direct1TapToggle">
                 ⚡ Direct 1-Tap Print
               </label>
               <div class="search-box">
@@ -98,12 +97,12 @@
 
           <!-- Category Tabs -->
           <div class="category-tabs" id="categoryTabs">
-            <button class="cat-tab active" data-cat="ALL">All Items</button>
+            <button class="cat-tab active" data-cat="ALL">☕ All Menu Items</button>
           </div>
 
           <!-- Touch Item Grid -->
           <div class="quick-pos-grid" id="quickPosGrid">
-            <!-- Dynamically Rendered Quick POS Buttons -->
+            <!-- Dynamically Rendered Menu Buttons -->
           </div>
         </div>
       </div>
@@ -134,14 +133,14 @@
           </div>
           <div class="cart-meta-bar" style="margin-top: 6px;">
             <div class="form-group-inline">
-              <input type="text" id="customerDept" placeholder="Department (e.g. CS, Admin)">
+              <input type="text" id="customerDept" placeholder="Department / Table (e.g. CS, T1)">
             </div>
             <div class="form-group-inline">
               <input type="tel" id="customerPhone" placeholder="Phone No (e.g. 9876543210)">
             </div>
           </div>
 
-          <!-- Cart Item List Table -->
+          <!-- Cart Table -->
           <div class="cart-items-container">
             <table class="cart-table">
               <thead>
@@ -156,7 +155,7 @@
               <tbody id="cartItemsList">
                 <tr class="empty-cart-row">
                   <td colspan="5" style="text-align:center; padding: 40px 10px; color: var(--text-muted);">
-                    🛒 Cart is empty<br><small>Click any menu item or use hotkeys [1-9, 0]</small>
+                    🛒 Cart is empty<br><small>Tap any item or use hotkeys [1-9, 0]</small>
                   </td>
                 </tr>
               </tbody>
@@ -171,8 +170,8 @@
             </div>
             <div class="summary-row">
               <span>Discount</span>
-              <div class="discount-input-group">
-                <input type="number" id="cartDiscount" value="0" min="0" max="100" style="width:60px; text-align:right;"> %
+              <div class="discount-input-wrap">
+                <input type="number" id="cartDiscount" value="0" min="0" max="100" placeholder="0">%
               </div>
             </div>
             <div class="summary-row grand-total-row">
@@ -180,325 +179,240 @@
               <strong id="cartGrandTotal">₹0.00</strong>
             </div>
 
-            <!-- Payment Method & Tender Calculator -->
-            <div class="payment-method-selector">
-              <label>Payment Method:</label>
-              <div class="pm-buttons">
-                <button class="btn-pm active" data-mode="Cash">💵 Cash</button>
-                <button class="btn-pm" data-mode="UPI">📱 UPI QR</button>
-                <button class="btn-pm" data-mode="Card">💳 Card</button>
+            <!-- Payment Row -->
+            <div class="payment-method-grid">
+              <div class="pay-field">
+                <label for="paymentMethodSelect">Method:</label>
+                <select id="paymentMethodSelect">
+                  <option value="Cash">💵 Cash</option>
+                  <option value="UPI">📱 UPI / QR</option>
+                  <option value="Card">💳 Card</option>
+                  <option value="Credit">📑 Credit / Khata</option>
+                </select>
+              </div>
+
+              <div class="pay-field">
+                <label for="paymentStatusSelect">Status:</label>
+                <select id="paymentStatusSelect">
+                  <option value="Paid">✅ Paid</option>
+                  <option value="Pending">⏳ Pending</option>
+                </select>
               </div>
             </div>
 
-            <!-- Payment Status Selector (Paid vs Unpaid / Debt) -->
-            <div class="payment-status-selector" style="margin-top: 8px;">
-              <label style="font-size:0.8rem; font-weight:600; color:var(--ink-secondary);">Payment Status:</label>
-              <div class="ps-buttons" style="display:flex; gap:6px; margin-top:4px;">
-                <button class="btn-ps active" data-status="Paid" style="flex:1; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); font-size:0.8rem; font-weight:600; cursor:pointer;">✅ Paid</button>
-                <button class="btn-ps" data-status="Unpaid" style="flex:1; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); font-size:0.8rem; font-weight:600; cursor:pointer; color:var(--danger);">⏳ Unpaid (Debt)</button>
+            <!-- Cash Calculator -->
+            <div class="cash-calc-bar" id="cashCalcBar">
+              <div class="pay-field">
+                <label for="cashGiven">Tender Given:</label>
+                <input type="number" id="cashGiven" placeholder="₹0" step="5">
               </div>
-            </div>
-
-            <!-- Cash Tender Quick Buttons -->
-            <div class="cash-tender-box" id="cashTenderBox">
-              <div class="tender-quick-row">
-                <span>Quick Tender:</span>
-                <button class="btn-tender-tag" data-val="exact">Exact</button>
-                <button class="btn-tender-tag" data-val="50">₹50</button>
-                <button class="btn-tender-tag" data-val="100">₹100</button>
-                <button class="btn-tender-tag" data-val="200">₹200</button>
-                <button class="btn-tender-tag" data-val="500">₹500</button>
-              </div>
-              <div class="tender-calc-row">
-                <div>
-                  <label for="cashGiven">Paid Amount:</label>
-                  <input type="number" id="cashGiven" placeholder="0" min="0">
-                </div>
-                <div class="change-due-box">
-                  <span>Change Due:</span>
-                  <strong id="changeDue">₹0.00</strong>
-                </div>
+              <div class="pay-field text-right">
+                <span class="change-label">Change Due:</span>
+                <strong id="changeDue" class="change-amount">₹0.00</strong>
               </div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="cart-actions-grid">
-              <button class="btn-danger-outline" id="clearCartBtn">🗑️ Clear Cart</button>
-              <button class="btn-primary-large" id="checkoutBtn">⚡ Checkout & Print Bill [Space]</button>
+            <div class="checkout-actions">
+              <button class="btn-clear-cart" id="clearCartBtn" title="Clear Cart">🗑️ Clear</button>
+              <button class="btn-primary btn-checkout" id="checkoutPrintBtn">🖨️ Print & Complete</button>
+              <button class="btn-secondary btn-checkout-save" id="checkoutSaveBtn">💾 Save Only</button>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
+    <!-- DAILY KPI METRICS STRIP -->
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <div class="kpi-icon">💰</div>
+        <div class="kpi-info">
+          <span class="kpi-label" id="dateSubLabel">Today's Sales</span>
+          <h3 id="kpiTotalSales">₹0.00</h3>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon">🧾</div>
+        <div class="kpi-info">
+          <span class="kpi-label">Bills Count</span>
+          <h3 id="kpiBillsCount">0</h3>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon">💸</div>
+        <div class="kpi-info">
+          <span class="kpi-label">Expenses & Wages</span>
+          <h3 id="kpiExpenses">₹0.00</h3>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-highlight">
+        <div class="kpi-icon">📈</div>
+        <div class="kpi-info">
+          <span class="kpi-label">Net Profit</span>
+          <h3 id="kpiNetProfit">₹0.00</h3>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- KPI SUMMARY DASHBOARD STRIP (MOVED TO BOTTOM) -->
-  <div class="total-strip" style="margin-top:24px;">
-    <div class="total-card big">
-      <div class="label">Total Revenue</div>
-      <div class="num" id="dayTotal">₹0.00</div>
-      <div class="sub-label" id="dateSubLabel">Selected Date</div>
+  <!-- MOBILE FLOATING CART BAR -->
+  <div class="mobile-cart-bar" id="mobileCartBar" style="display:none;">
+    <div class="m-cart-info" id="openMobileCartBtn">
+      <span class="m-cart-badge" id="mCartCount">0</span>
+      <span class="m-cart-title">View Cart</span>
     </div>
-    <div class="total-card">
-      <div class="label">Items Sold</div>
-      <div class="num" id="dayItems">0</div>
-      <div class="sub-label">Total Units</div>
-    </div>
-    <div class="total-card">
-      <div class="label">Transactions</div>
-      <div class="num" id="dayTx">0</div>
-      <div class="sub-label">Bills Issued</div>
-    </div>
-    <div class="total-card">
-      <div class="label">Avg Order Value</div>
-      <div class="num" id="dayAov">₹0</div>
-      <div class="sub-label">Per Sale</div>
-    </div>
-    <div class="total-card danger-card">
-      <div class="label">Pending Debt</div>
-      <div class="num" id="dayDebt" style="color:var(--danger);">₹0.00</div>
-      <div class="sub-label" id="dayDebtCount">0 Unpaid Bills</div>
-    </div>
-    <div class="total-card highlight-card">
-      <div class="label">Top Category</div>
-      <div class="num top-cat-text" id="dayTopCat">—</div>
-      <div class="sub-label" id="dayTopCatShare">0% of revenue</div>
-    </div>
+    <div class="m-cart-total" id="mCartTotal">₹0.00</div>
+    <button class="btn-primary m-checkout-btn" id="mCheckoutBtn">🖨️ Bill</button>
   </div>
 
-  <!-- MOBILE FLOATING QUICK CART BAR -->
-  <div class="mobile-floating-cart-bar" id="mobileFloatingCartBar">
-    <div class="m-cart-info">
-      <span class="m-cart-qty">🛒 <span id="mCartCount">0</span> Items</span>
-      <strong class="m-cart-total" id="mCartTotal">₹0.00</strong>
-    </div>
-    <button class="m-btn-checkout" id="mCheckoutBtn">View Cart & Pay ➔</button>
-  </div>
+  <!-- MODALS SECTION -->
 
-  <!-- MOBILE BOTTOM NAVIGATION BAR -->
-  <nav class="mobile-bottom-nav" id="mobileBottomNav">
-    <button class="m-nav-item active" id="mnavPos">
-      <span class="m-nav-icon">⚡</span>
-      <span class="m-nav-label">POS Menu</span>
-    </button>
-    <button class="m-nav-item" id="mnavCart">
-      <span class="m-nav-icon">🛒</span>
-      <span class="m-nav-label">Cart (<span id="mnavCartBadge">0</span>)</span>
-    </button>
-    <button class="m-nav-item" id="mnavLedger">
-      <span class="m-nav-icon">💳</span>
-      <span class="m-nav-label">Ledger</span>
-    </button>
-    <button class="m-nav-item" id="mnavExpenses">
-      <span class="m-nav-icon">💸</span>
-      <span class="m-nav-label">Expenses</span>
-    </button>
-    <button class="m-nav-item" id="mnavReports">
-      <span class="m-nav-icon">📈</span>
-      <span class="m-nav-label">Reports</span>
-    </button>
-  </nav>
-
-  <!-- TOAST CONTAINER -->
-  <div id="toastContainer" class="toast-container"></div>
-
-  <!-- MODAL: RECEIPT & PRINT PREVIEW -->
-  <div id="receiptModal" class="modal-overlay">
-    <div class="modal-card receipt-modal-card">
+  <!-- STORE BRANDING MODAL -->
+  <div class="modal-overlay" id="storeModal">
+    <div class="modal-box">
       <div class="modal-header">
-        <h3>🧾 Tax Invoice & Receipt</h3>
-        <button class="modal-close-btn" data-close="receiptModal">✕</button>
+        <h3>🏪 Edit Store Information & Settings</h3>
+        <button class="btn-close-modal" class="modal-close" onclick="closeModal('storeModal')">✕</button>
       </div>
       <div class="modal-body">
-        <!-- Printable Thermal Receipt Area -->
-        <div id="thermalReceiptContent" class="thermal-receipt">
-          <div class="receipt-header">
-            <h2 id="rShopName">Coffee Spot</h2>
-            <p id="rShopTag">Gandhigram Rural Institute, Chinnalapatti, Dindigul</p>
-            <p class="receipt-divider">--------------------------------</p>
-            <div class="receipt-row-between">
-              <span>Bill No: <strong id="rBillNo">#101</strong></span>
-              <span>Token: <strong id="rTokenNo">#1</strong></span>
-            </div>
-            <div class="receipt-row-between">
-              <span>Date: <span id="rDate">2026-07-27</span></span>
-              <span>Time: <span id="rTime">12:00 PM</span></span>
-            </div>
-            <div class="receipt-row-between">
-              <span>Cust: <span id="rCustName">Walk-in</span></span>
-              <span>Dept: <span id="rCustDept">—</span></span>
-            </div>
-            <div class="receipt-row-between">
-              <span>Phone: <span id="rCustPhone">—</span></span>
-              <span>Status: <strong id="rPayStatus">PAID</strong></span>
-            </div>
-            <div class="receipt-row-between">
-              <span>Type: <span id="rOrderType">Dine In</span></span>
-              <span>Payment: <span id="rPayMethod">Cash</span></span>
-            </div>
-            <p class="receipt-divider">--------------------------------</p>
-          </div>
-
-          <table class="receipt-table">
-            <thead>
-              <tr>
-                <th style="text-align:left;">Item</th>
-                <th style="text-align:center;">Qty</th>
-                <th style="text-align:right;">Price</th>
-                <th style="text-align:right;">Amt</th>
-              </tr>
-            </thead>
-            <tbody id="rTableBody">
-              <!-- Item rows -->
-            </tbody>
-          </table>
-
-          <p class="receipt-divider">--------------------------------</p>
-          <div class="receipt-totals">
-            <div class="r-row"><span>Subtotal:</span><span id="rSubtotal">₹0.00</span></div>
-            <div class="r-row" id="rDiscountRow"><span>Discount:</span><span id="rDiscount">-₹0.00</span></div>
-            <div class="r-row grand"><span>Total Paid:</span><span id="rGrandTotal">₹0.00</span></div>
-          </div>
-          <p class="receipt-divider">--------------------------------</p>
-
-          <!-- QR Code Container for Receipt -->
-          <div class="receipt-qr-section">
-            <div id="receiptQrCode"></div>
-            <p class="qr-caption">Scan to Verify / Pay via UPI</p>
-          </div>
-
-          <div class="receipt-footer" id="rFooterMessage">
-            <p>Thank you for visiting Coffee Spot! ☕</p>
-          </div>
+        <div class="form-group">
+          <label>Store Name</label>
+          <input type="text" id="storeNameInput" placeholder="Coffee Spot">
+        </div>
+        <div class="form-group">
+          <label>Tagline / Location / Address</label>
+          <input type="text" id="storeTagInput" placeholder="Gandhigram Rural Institute, Chinnalapatti, Dindigul">
+        </div>
+        <div class="form-group">
+          <label>UPI ID (For Live UPI QR Code Payment)</label>
+          <input type="text" id="storeUpiInput" placeholder="coffeespot@upi">
+        </div>
+        <div class="form-group">
+          <label>Receipt Footer Note</label>
+          <input type="text" id="storeFooterInput" placeholder="Thank you for visiting! Have a wonderful day ☕">
+        </div>
+        <div class="form-group checkbox-group">
+          <label><input type="checkbox" id="audioToggleInput" checked> 🔊 Audio Sound Chimes (Web Audio Feedback)</label>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" data-close="receiptModal">Close</button>
-        <button class="btn-primary" id="triggerPrintBtn">🖨️ Print Thermal Receipt</button>
+        <button class="btn-secondary" onclick="closeModal('storeModal')">Cancel</button>
+        <button class="btn-primary" id="saveStoreBtn">Save Settings</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: CATALOG MANAGER -->
-  <div id="catalogModal" class="modal-overlay">
-    <div class="modal-card modal-large">
+  <!-- CATALOG MANAGEMENT MODAL -->
+  <div class="modal-overlay" id="catalogModal">
+    <div class="modal-box modal-lg">
       <div class="modal-header">
-        <h3>⚙️ Menu Catalog Manager</h3>
-        <button class="modal-close-btn" data-close="catalogModal">✕</button>
+        <h3>⚙️ Menu Catalog Management</h3>
+        <button class="btn-close-modal" onclick="closeModal('catalogModal')">✕</button>
       </div>
       <div class="modal-body">
-        <div class="catalog-manager-layout">
-          <!-- Left: Add/Edit Item Form -->
-          <div class="catalog-form-panel">
-            <h4 id="catalogFormTitle">Add New Item</h4>
-            <form id="catalogItemForm">
-              <input type="hidden" id="editItemId">
-              <div class="form-group">
-                <label for="itemCatSelect">Category</label>
-                <input type="text" id="itemCatInput" list="categoryDatalist" placeholder="e.g. Beverages (₹15), Snacks" required>
-                <datalist id="categoryDatalist"></datalist>
-              </div>
-              <div class="form-group">
-                <label for="itemNameInput">Item Name</label>
-                <input type="text" id="itemNameInput" placeholder="e.g. Cold Coffee" required>
-              </div>
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label for="itemPriceInput">Price (₹)</label>
-                  <input type="number" id="itemPriceInput" step="0.5" placeholder="15" required>
-                </div>
-                <div class="form-group">
-                  <label for="itemIconInput">Icon / Emoji</label>
-                  <input type="text" id="itemIconInput" placeholder="☕" maxlength="4">
-                </div>
-              </div>
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label for="itemHotkeyInput">Quick Hotkey (1-0)</label>
-                  <input type="text" id="itemHotkeyInput" placeholder="Optional (e.g. 1)" maxlength="1">
-                </div>
-                <div class="form-group">
-                  <label for="itemStockSelect">Stock Status</label>
-                  <select id="itemStockSelect">
-                    <option value="instock">✅ In Stock</option>
-                    <option value="lowstock">⚠️ Low Stock</option>
-                    <option value="outstock">❌ Out of Stock</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn-primary" id="saveCatalogItemBtn">➕ Save Item</button>
-                <button type="button" class="btn-secondary" id="resetCatalogFormBtn">Reset</button>
-              </div>
-            </form>
+        <div class="catalog-edit-form">
+          <input type="hidden" id="editItemId">
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Item Name</label>
+              <input type="text" id="itemNameInput" placeholder="e.g. Masala Chai">
+            </div>
+            <div class="form-group flex-1">
+              <label>Category</label>
+              <input type="text" id="itemCatInput" list="categoryDatalist" placeholder="e.g. Beverages">
+              <datalist id="categoryDatalist"></datalist>
+            </div>
           </div>
+          <div class="form-row">
+            <div class="form-group width-100">
+              <label>Price (₹)</label>
+              <input type="number" id="itemPriceInput" placeholder="15" step="1">
+            </div>
+            <div class="form-group width-100">
+              <label>Icon Emoji</label>
+              <input type="text" id="itemIconInput" placeholder="☕">
+            </div>
+            <div class="form-group width-100">
+              <label>Hotkey (1-9, 0)</label>
+              <input type="text" id="itemHotkeyInput" placeholder="1" maxlength="1">
+            </div>
+            <div class="form-group width-120">
+              <label>Stock Status</label>
+              <select id="itemStockInput">
+                <option value="instock">In Stock</option>
+                <option value="lowstock">Low Stock</option>
+                <option value="outstock">Out of Stock</option>
+              </select>
+            </div>
+          </div>
+          <div class="catalog-form-actions">
+            <button class="btn-primary" id="saveItemBtn">➕ Add / Update Item</button>
+            <button class="btn-secondary" id="resetCatalogBtn">🔄 Reset to Default Menu</button>
+          </div>
+        </div>
 
-          <!-- Right: Existing Catalog Items List -->
-          <div class="catalog-list-panel">
-            <div class="flex-between" style="margin-bottom: 12px;">
-              <h4>Catalog Items (<span id="catalogCount">0</span>)</h4>
-              <button class="btn-danger-outline btn-sm" id="resetDefaultCatalogBtn">↺ Reset to Default Catalog</button>
-            </div>
-            <div class="catalog-table-wrapper">
-              <table class="catalog-table">
-                <thead>
-                  <tr>
-                    <th>Icon</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Hotkey</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="catalogTableBody">
-                  <!-- Rendered dynamically -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div class="catalog-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Icon</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Hotkey</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="catalogTableBody">
+              <!-- Catalog Rows -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: RECENT BILLS HISTORY -->
-  <div id="recentBillsModal" class="modal-overlay">
-    <div class="modal-card modal-large">
+  <!-- RECENT BILLS MODAL -->
+  <div class="modal-overlay" id="recentBillsModal">
+    <div class="modal-box modal-lg">
       <div class="modal-header">
-        <h3>🧾 Recent Bills & Sales History</h3>
-        <button class="modal-close-btn" data-close="recentBillsModal">✕</button>
+        <h3>🧾 Recent Sales Bills</h3>
+        <button class="btn-close-modal" onclick="closeModal('recentBillsModal')">✕</button>
       </div>
       <div class="modal-body">
-        <div class="recent-bills-controls">
-          <input type="text" id="billSearchInput" placeholder="🔍 Search Bill #, Cust, Dept, Phone..." style="max-width: 280px;">
-          <div class="bills-filter-tabs" id="billsFilterTabs" style="display:flex; gap:6px;">
-            <button class="btn-secondary btn-sm active-bill-tab" data-filter="ALL">All Bills</button>
-            <button class="btn-secondary btn-sm" data-filter="Paid">✅ Paid</button>
-            <button class="btn-secondary btn-sm" data-filter="Unpaid" style="color:var(--danger);">⏳ Unpaid (Debt)</button>
+        <div class="filter-bar flex-between">
+          <div class="bills-filter-buttons" id="billsFilterButtons">
+            <button class="btn-chip active" data-filter="ALL">All Payments</button>
+            <button class="btn-chip" data-filter="Cash">💵 Cash</button>
+            <button class="btn-chip" data-filter="UPI">📱 UPI</button>
+            <button class="btn-chip" data-filter="Credit">📑 Credit / Khata</button>
+            <button class="btn-chip" data-filter="Pending">⏳ Pending</button>
           </div>
-          <div class="bills-stat-summary">
-            Total: <strong id="recentBillsTotal">₹0.00</strong> (<span id="recentBillsCount">0</span> bills)
-          </div>
+          <input type="text" id="billSearchInput" class="search-input-sm" placeholder="🔍 Search Bill # or Customer...">
         </div>
-        <div class="recent-bills-table-wrapper">
-          <table class="recent-bills-table">
+
+        <div class="bills-table-wrap">
+          <table class="data-table">
             <thead>
               <tr>
                 <th>Bill #</th>
-                <th>Buying Date & Time</th>
-                <th>Customer & Dept</th>
-                <th>Phone</th>
-                <th>Items</th>
+                <th>Token</th>
+                <th>Time</th>
+                <th>Customer</th>
+                <th>Type</th>
                 <th>Total</th>
-                <th>Payment & Status</th>
+                <th>Method</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody id="recentBillsTableBody">
-              <!-- Rendered dynamically -->
+              <!-- Recent Bills Rows -->
             </tbody>
           </table>
         </div>
@@ -506,53 +420,43 @@
     </div>
   </div>
 
-  <!-- MODAL: CUSTOMER DEBT & LATE PAYMENT LEDGER -->
-  <div id="customerLedgerModal" class="modal-overlay">
-    <div class="modal-card modal-large">
+  <!-- CUSTOMER LEDGER (DEBT TRACKER / KHATA) MODAL -->
+  <div class="modal-overlay" id="ledgerModal">
+    <div class="modal-box modal-lg">
       <div class="modal-header">
-        <h3>💳 Customer Ledger — Unpaid Debt & Late Payment Tracker</h3>
-        <button class="modal-close-btn" data-close="customerLedgerModal">✕</button>
+        <h3>💳 Customer Ledger & Outstanding Debt Tracker</h3>
+        <button class="btn-close-modal" onclick="closeModal('ledgerModal')">✕</button>
       </div>
       <div class="modal-body">
-        <!-- KPI summary row for debt -->
-        <div class="total-strip" style="margin-bottom: 16px;">
-          <div class="total-card danger-card">
-            <div class="label">Total Outstanding Debt</div>
-            <div class="num" id="ledgerTotalDebt" style="color:var(--danger);">₹0.00</div>
-            <div class="sub-label" id="ledgerPendingCount">0 Unpaid Customers</div>
+        <div class="ledger-top-summary">
+          <div class="ledger-stat-box">
+            <span>Total Outstanding Debt</span>
+            <h2 id="ledgerTotalDebt" style="color:var(--danger);">₹0.00</h2>
           </div>
-          <div class="total-card">
-            <div class="label">Unpaid Bills</div>
-            <div class="num" id="ledgerBillCount">0</div>
-            <div class="sub-label">Pending Invoices</div>
-          </div>
-          <div class="total-card">
-            <div class="label">Most Owed Customer</div>
-            <div class="num" id="ledgerTopDebtor" style="font-size:1.1rem; color:var(--ink);">—</div>
-            <div class="sub-label" id="ledgerTopDebtorAmt">₹0.00 Owed</div>
+          <div class="ledger-stat-box">
+            <span>Customers with Pending Balance</span>
+            <h2 id="ledgerPendingCustomersCount">0</h2>
           </div>
         </div>
 
-        <div class="recent-bills-controls" style="margin-bottom:12px;">
-          <input type="text" id="ledgerSearchInput" placeholder="🔍 Search Customer Name, Dept, or Phone..." style="max-width: 320px;">
-          <span style="font-size:0.85rem; color:var(--text-muted);">Tracks buyers with pending or late payments across all dates</span>
+        <div class="ledger-search-bar">
+          <input type="text" id="ledgerSearchInput" placeholder="🔍 Search customer by name or phone...">
         </div>
 
-        <div class="recent-bills-table-wrapper">
-          <table class="recent-bills-table">
+        <div class="ledger-table-wrap">
+          <table class="data-table">
             <thead>
               <tr>
                 <th>Customer Name</th>
-                <th>Department</th>
-                <th>Phone Number</th>
-                <th>Pending Bills</th>
-                <th>Total Owed (₹)</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th>Dept / Table</th>
+                <th>Phone</th>
+                <th>Unpaid Bills</th>
+                <th>Total Pending</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="customerLedgerTableBody">
-              <!-- Dynamically populated -->
+            <tbody id="ledgerTableBody">
+              <!-- Ledger Customer Rows -->
             </tbody>
           </table>
         </div>
@@ -560,252 +464,278 @@
     </div>
   </div>
 
-  <!-- MODAL: ANALYTICS DASHBOARD -->
-  <div id="analyticsModal" class="modal-overlay">
-    <div class="modal-card modal-large">
+  <!-- EXPENSES & LABOUR MODAL -->
+  <div class="modal-overlay" id="expensesModal">
+    <div class="modal-box modal-lg">
       <div class="modal-header">
-        <h3>📊 Sales Analytics & Performance Insights</h3>
-        <button class="modal-close-btn" data-close="analyticsModal">✕</button>
+        <h3>💸 Expenses & Labour Wage Tracker</h3>
+        <button class="btn-close-modal" onclick="closeModal('expensesModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="expenses-grid">
+          <!-- Labour Charges Card -->
+          <div class="expense-card lab-card-wide">
+            <div class="flex-between" style="align-items:center; margin-bottom:8px;">
+              <h4>👨‍🍳 Daily Staff & Labour Wages</h4>
+              <span class="badge-chip" id="labourTotalBadge" style="background:var(--primary-light); color:var(--primary); font-weight:bold; font-size:0.85rem;">Total: ₹0.00 / day</span>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Manage daily charges for 5 shop labours or add new joiners dynamically.</p>
+            
+            <div class="labour-list-container" id="labourListContainer">
+              <!-- Dynamically rendered labour rows -->
+            </div>
+
+            <div class="labour-actions-row" style="display:flex; gap:8px; margin-top:12px;">
+              <button class="btn-outline" id="addNewLabourBtn" style="flex:1;">➕ Add New Labour / Joiner</button>
+              <button class="btn-primary" id="saveLabourBtn" style="flex:1;">💾 Save Labour Wages</button>
+            </div>
+          </div>
+
+          <!-- Add Expense Card -->
+          <div class="expense-card">
+            <h4>🛒 Record Expense</h4>
+            <div class="form-group">
+              <label>Description / Item</label>
+              <input type="text" id="expenseTitleInput" placeholder="e.g. Milk 5 Litres, Gas Cylinder">
+            </div>
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>Amount (₹)</label>
+                <input type="number" id="expenseAmountInput" placeholder="0">
+              </div>
+              <div class="form-group flex-1">
+                <label>Category</label>
+                <select id="expenseCatInput">
+                  <option value="Raw Materials">Milk & Ingredients</option>
+                  <option value="Snacks & Bakery">Bakery & Supplies</option>
+                  <option value="Gas & Utility">Gas & Utilities</option>
+                  <option value="Misc">Miscellaneous</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-primary" id="addExpenseBtn">➕ Add Expense</button>
+          </div>
+        </div>
+
+        <h4 style="margin-top:20px;">Expense Log for <span id="expenseDateTitle">Today</span></h4>
+        <div class="expenses-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="expensesTableBody">
+              <!-- Expense Log Rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCIAL SUMMARIES & REPORTS MODAL -->
+  <div class="modal-overlay" id="reportsModal">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3>📈 Financial Summaries & Reports</h3>
+        <button class="btn-close-modal" onclick="closeModal('reportsModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="report-period-tabs">
+          <button class="report-tab active" data-period="daily">📅 Daily Summary</button>
+          <button class="report-tab" data-period="monthly">🗓️ Monthly Summary</button>
+          <button class="report-tab" data-period="yearly">📊 Yearly Summary</button>
+        </div>
+
+        <div class="report-filter-controls">
+          <div id="monthPickerWrap" style="display:none;">
+            <label>Select Month: </label>
+            <input type="month" id="reportMonthInput">
+          </div>
+          <div id="yearPickerWrap" style="display:none;">
+            <label>Select Year: </label>
+            <input type="number" id="reportYearInput" min="2020" max="2035" step="1">
+          </div>
+        </div>
+
+        <div class="report-summary-cards">
+          <div class="report-card">
+            <span>Gross Sales</span>
+            <h3 id="repGrossSales">₹0.00</h3>
+          </div>
+          <div class="report-card">
+            <span>Total Discounts</span>
+            <h3 id="repDiscounts">₹0.00</h3>
+          </div>
+          <div class="report-card">
+            <span>Total Expenses & Wages</span>
+            <h3 id="repExpenses">₹0.00</h3>
+          </div>
+          <div class="report-card highlight">
+            <span>Net Revenue / Profit</span>
+            <h3 id="repNetProfit">₹0.00</h3>
+          </div>
+        </div>
+
+        <div class="report-chart-container" style="margin-top:20px; height: 260px;">
+          <canvas id="summaryReportChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SALES ANALYTICS MODAL -->
+  <div class="modal-overlay" id="analyticsModal">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3>📊 Detailed Visual Analytics</h3>
+        <button class="btn-close-modal" onclick="closeModal('analyticsModal')">✕</button>
       </div>
       <div class="modal-body">
         <div class="analytics-grid">
-          <div class="analytics-card">
-            <h4>Hourly Revenue Breakdown</h4>
-            <div class="chart-container">
-              <canvas id="hourlySalesChart"></canvas>
-            </div>
+          <div class="chart-box">
+            <h4>⏰ Hourly Sales Distribution</h4>
+            <div style="height: 250px;"><canvas id="hourlyChart"></canvas></div>
           </div>
-          <div class="analytics-card">
-            <h4>Category Revenue Distribution</h4>
-            <div class="chart-container">
-              <canvas id="categoryRevenueChart"></canvas>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Top Selling Products Table -->
-        <div class="analytics-card" style="margin-top:20px;">
-          <h4>🏆 Top-Selling Products Performance</h4>
-          <div class="catalog-table-wrapper" style="margin-top:10px;">
-            <table class="catalog-table">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Category</th>
-                  <th>Units Sold</th>
-                  <th>Revenue (₹)</th>
-                  <th>Share (%)</th>
-                </tr>
-              </thead>
-              <tbody id="topSellingTableBody">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
+          <div class="chart-box">
+            <h4>🥧 Category Revenue Breakdown</h4>
+            <div style="height: 250px;"><canvas id="categoryChart"></canvas></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: STORE EDIT / DETAILS -->
-  <div id="storeModal" class="modal-overlay">
-    <div class="modal-card">
+  <!-- BACKUP & RESTORE MODAL -->
+  <div class="modal-overlay" id="backupModal">
+    <div class="modal-box">
       <div class="modal-header">
-        <h3>✏️ Edit Store Settings</h3>
-        <button class="modal-close-btn" data-close="storeModal">✕</button>
+        <h3>💾 Backup & Restore System Data</h3>
+        <button class="btn-close-modal" onclick="closeModal('backupModal')">✕</button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-          <label for="storeNameInput">Store Name</label>
-          <input type="text" id="storeNameInput" value="Coffee Spot">
+        <p>Safeguard your sales records, custom menu, customer debt ledger, and expenses.</p>
+        <div class="backup-actions-grid">
+          <div class="backup-card">
+            <h4>📥 Export Backup</h4>
+            <p>Download a full backup file (.json) containing all your shop data.</p>
+            <button class="btn-primary" id="downloadBackupBtn">Download Backup File</button>
+          </div>
+          <div class="backup-card">
+            <h4>📤 Restore Backup</h4>
+            <p>Restore shop data from a previously downloaded JSON backup file.</p>
+            <input type="file" id="restoreFileInput" accept=".json" style="display:none;">
+            <button class="btn-secondary" id="triggerRestoreBtn">Choose File to Restore</button>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="storeTagInput">Tagline / Address</label>
-          <input type="text" id="storeTagInput" value="Gandhigram Rural Institute, Chinnalapatti, Dindigul">
-        </div>
-        <div class="form-group">
-          <label for="storeUpiInput">UPI ID for Payment QR (e.g. coffee@upi)</label>
-          <input type="text" id="storeUpiInput" placeholder="9876543210@upi">
-        </div>
-        <div class="form-group">
-          <label for="storeFooterInput">Receipt Footer Message</label>
-          <input type="text" id="storeFooterInput" placeholder="Thank you for visiting! Have a wonderful day ☕">
-        </div>
-        <div class="form-group">
-          <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:600;">
-            <input type="checkbox" id="audioToggleInput" checked>
-            🔊 Enable Audio Chime Feedback
-          </label>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-secondary" data-close="storeModal">Cancel</button>
-        <button class="btn-primary" id="saveStoreBtn">💾 Save Store Info</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: BACKUP & RESTORE -->
-  <div id="backupModal" class="modal-overlay">
-    <div class="modal-card">
+  <!-- PRICE VARIANT SELECTOR MODAL -->
+  <div class="modal-overlay" id="variantModal">
+    <div class="modal-box" style="max-width: 420px;">
       <div class="modal-header">
-        <h3>💾 Data Backup & Restore</h3>
-        <button class="modal-close-btn" data-close="backupModal">✕</button>
+        <h3 id="variantItemTitle">Select Price / Rate</h3>
+        <button class="btn-close-modal" onclick="closeModal('variantModal')">✕</button>
       </div>
-      <div class="modal-body">
-        <p>Export all sales records, catalog settings, and store preferences into a JSON file, or restore from a previous backup.</p>
-        <div class="backup-actions">
-          <button class="btn-primary" id="downloadBackupBtn">📥 Download JSON Backup</button>
-          <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);">
-          <div class="form-group">
-            <label>Restore from JSON File:</label>
-            <input type="file" id="restoreFileInput" accept=".json">
-          </div>
+      <div class="modal-body text-center" style="text-align:center;">
+        <p style="color:var(--text-muted); margin-bottom:14px; font-size:0.9rem;">Tap desired price variant to add to bill:</p>
+        <div class="variant-buttons-grid" id="variantButtonsGrid" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+          <!-- Variant rate buttons generated dynamically -->
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: EXPENSES & LABOUR CHARGES -->
-  <div id="expensesModal" class="modal-overlay">
-    <div class="modal-card modal-large">
-      <div class="modal-header">
-        <h3>💸 Daily Labour Charges & Miscellaneous Expenses</h3>
-        <button class="modal-close-btn" data-close="expensesModal">✕</button>
+  <!-- THERMAL RECEIPT PRINT MODAL -->
+  <div class="modal-overlay" id="receiptModal">
+    <div class="modal-box modal-receipt">
+      <div class="modal-header no-print">
+        <h3>🖨️ Customer Receipt</h3>
+        <button class="btn-close-modal" onclick="closeModal('receiptModal')">✕</button>
       </div>
-      <div class="modal-body">
-        <div class="catalog-manager-layout">
-          <!-- Left: Forms for Labour & Misc Expenses -->
-          <div class="catalog-form-panel">
-            <h4 style="margin-bottom:10px;">👨‍🍳 Daily Labour Wages</h4>
-            <form id="labourForm" style="background:var(--bg-panel); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:20px;">
-              <div class="form-group">
-                <label for="teaMasterWage">🍵 Tea Master Wage (₹)</label>
-                <input type="number" id="teaMasterWage" placeholder="e.g. 500" min="0" step="10">
-              </div>
-              <div class="form-group">
-                <label for="vadaMasterWage">🧆 Vada Master Wage (₹)</label>
-                <input type="number" id="vadaMasterWage" placeholder="e.g. 500" min="0" step="10">
-              </div>
-              <button type="submit" class="btn-primary" style="width:100%;">💾 Save Daily Labour Wages</button>
-            </form>
+      
+      <!-- PRINTABLE THERMAL RECEIPT CONTAINER -->
+      <div class="receipt-paper" id="receiptPaper">
+        <div class="receipt-header">
+          <h2 id="recStoreName">Coffee Spot</h2>
+          <p id="recStoreTag">Gandhigram Rural Institute, Chinnalapatti, Dindigul</p>
+          <div class="receipt-divider">--------------------------------</div>
+          <div class="receipt-meta">
+            <div>Bill #: <strong id="recBillNo">101</strong> | Token #: <strong id="recTokenNo">1</strong></div>
+            <div>Date: <span id="recDateTime">--</span></div>
+            <div>Order Type: <span id="recOrderType">Dine In</span></div>
+            <div id="recCustomerRow" style="display:none;">Customer: <span id="recCustomerName">--</span></div>
+          </div>
+          <div class="receipt-divider">--------------------------------</div>
+        </div>
 
-            <h4 style="margin-bottom:10px;">📦 Add Miscellaneous Expense</h4>
-            <form id="expenseForm" style="background:var(--bg-panel); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
-              <div class="form-group">
-                <label for="expCategory">Category</label>
-                <select id="expCategory">
-                  <option value="Milk & Dairy">🥛 Milk & Dairy</option>
-                  <option value="Gas Cylinder">🔥 Gas Cylinder</option>
-                  <option value="Oil & Raw Materials">🌻 Oil & Raw Materials</option>
-                  <option value="Tea & Coffee Powder">☕ Tea & Coffee Powder</option>
-                  <option value="Sugar & Groceries">🌾 Sugar & Groceries</option>
-                  <option value="Disposable Cups & Packaging">📦 Disposable Cups & Packaging</option>
-                  <option value="Electricity & Water">⚡ Electricity & Water</option>
-                  <option value="Maintenance & Cleaning">🧹 Maintenance & Cleaning</option>
-                  <option value="Miscellaneous">📋 Miscellaneous</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="expDesc">Description</label>
-                <input type="text" id="expDesc" placeholder="e.g. 10L Milk packet" required>
-              </div>
-              <div class="form-group">
-                <label for="expAmount">Amount (₹)</label>
-                <input type="number" id="expAmount" placeholder="e.g. 350" min="1" step="1" required>
-              </div>
-              <button type="submit" class="btn-primary" style="width:100%;">➕ Add Expense</button>
-            </form>
+        <table class="receipt-table">
+          <thead>
+            <tr>
+              <th style="text-align:left;">Item</th>
+              <th style="text-align:center;">Qty</th>
+              <th style="text-align:right;">Price</th>
+              <th style="text-align:right;">Amt</th>
+            </tr>
+          </thead>
+          <tbody id="recItemsList">
+            <!-- Receipt rows -->
+          </tbody>
+        </table>
+
+        <div class="receipt-divider">--------------------------------</div>
+
+        <div class="receipt-totals">
+          <div class="rec-total-row"><span>Subtotal:</span> <span id="recSubtotal">₹0.00</span></div>
+          <div class="rec-total-row" id="recDiscountRow" style="display:none;"><span>Discount:</span> <span id="recDiscount">₹0.00</span></div>
+          <div class="rec-total-row grand"><span>TOTAL:</span> <span id="recGrandTotal">₹0.00</span></div>
+          <div class="rec-total-row"><span>Paid via:</span> <span id="recPayMethod">Cash</span></div>
+        </div>
+
+        <!-- Live PhonePe UPI Payment QR Code -->
+        <div style="margin-top: 14px; padding: 12px; border: 2px solid #5f259f; border-radius: 12px; background: #FAF7FF; text-align: center;">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 6px;">
+            <div style="background: #5f259f; color: #ffffff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; font-family: sans-serif;">पे</div>
+            <span style="font-size: 1.1rem; font-weight: 800; color: #5f259f; font-family: sans-serif; letter-spacing: -0.5px;">PhonePe</span>
           </div>
 
-          <!-- Right: Daily Expenses & Wages Table -->
-          <div class="catalog-list-panel">
-            <div class="flex-between" style="margin-bottom: 12px;">
-              <h4>Expense Summary (<span id="expDateLabel">Today</span>)</h4>
-              <div>Total Expenses & Wages: <strong id="expTotalDisplay" style="color:var(--danger);">₹0.00</strong></div>
-            </div>
-            <div class="catalog-table-wrapper">
-              <table class="catalog-table">
-                <thead>
-                  <tr>
-                    <th>Type / Category</th>
-                    <th>Description</th>
-                    <th>Amount (₹)</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="expensesTableBody">
-                  <!-- Dynamically rendered expenses & labour rows -->
-                </tbody>
-              </table>
-            </div>
+          <div style="background: #ffffff; padding: 8px; display: inline-block; border-radius: 8px; border: 1px solid #e2e8f0; margin: 4px 0;" id="receiptQrWrap">
+            <div id="receiptQrCanvas"></div>
           </div>
+
+          <div style="font-size: 0.85rem; font-weight: 700; color: #0f172a; margin-top: 4px; font-family: monospace; letter-spacing: 0.2px;">
+            UPI ID: Q516961806@ybl
+          </div>
+
+          <div style="margin-top: 6px; font-size: 0.7rem; font-weight: 700; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 4px;">
+            <span>BHIM | UPI</span> &bull; <span>Scan & Pay via Any UPI App</span>
+          </div>
+        </div>
+
+        <div class="receipt-divider">--------------------------------</div>
+
+        <div class="receipt-footer">
+          <p id="recFooterText">Thank you for visiting Coffee Spot! Have a wonderful day ☕</p>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- MODAL: MULTI-PERIOD FINANCIAL SUMMARY DASHBOARD (DAILY, MONTHLY, YEARLY) -->
-  <div id="reportsModal" class="modal-overlay">
-    <div class="modal-card modal-large">
-      <div class="modal-header">
-        <h3>📈 Financial Summary Dashboard (Daily, Monthly & Yearly)</h3>
-        <button class="modal-close-btn" data-close="reportsModal">✕</button>
-      </div>
-      <div class="modal-body">
-        <!-- Period Tabs & Selectors -->
-        <div class="recent-bills-controls">
-          <div class="period-tabs" style="display:flex; gap:6px;">
-            <button class="btn-secondary active-period-tab" id="tabDailySummary" data-period="daily">📅 Daily Summary</button>
-            <button class="btn-secondary" id="tabMonthlySummary" data-period="monthly">🗓️ Monthly Summary</button>
-            <button class="btn-secondary" id="tabYearlySummary" data-period="yearly">📊 Yearly Summary</button>
-          </div>
-          <div class="period-picker-container" id="periodPickerContainer">
-            <!-- Dynamic Month / Year selector -->
-          </div>
-        </div>
-
-        <!-- Period KPI Metric Strip -->
-        <div class="total-strip" style="margin-top:16px;">
-          <div class="total-card">
-            <div class="label">Gross Revenue</div>
-            <div class="num" id="pRevenue">₹0.00</div>
-            <div class="sub-label">Sales Income</div>
-          </div>
-          <div class="total-card">
-            <div class="label">Labour Charges</div>
-            <div class="num" id="pLabour" style="color:var(--amber);">₹0.00</div>
-            <div class="sub-label">Tea & Vada Masters</div>
-          </div>
-          <div class="total-card">
-            <div class="label">Misc Expenses</div>
-            <div class="num" id="pExpenses" style="color:var(--danger);">₹0.00</div>
-            <div class="sub-label">Operating Costs</div>
-          </div>
-          <div class="total-card">
-            <div class="label">Pending Debt</div>
-            <div class="num" id="pDebt">₹0.00</div>
-            <div class="sub-label">Unpaid Dues</div>
-          </div>
-          <div class="total-card highlight-card" id="netProfitCard">
-            <div class="label">Net Profit / Loss</div>
-            <div class="num" id="pNetProfit" style="color:var(--primary);">₹0.00</div>
-            <div class="sub-label" id="pNetProfitShare">Gross - Costs</div>
-          </div>
-        </div>
-
-        <!-- Chart Container -->
-        <div class="analytics-card" style="margin-top:20px;">
-          <h4 id="reportChartTitle">Daily Sales & Expenses Breakdown</h4>
-          <div class="chart-container" style="height:280px;">
-            <canvas id="summaryReportChart"></canvas>
-          </div>
-        </div>
+      <div class="modal-footer no-print flex-between">
+        <button class="btn-secondary" onclick="closeModal('receiptModal')">Close</button>
+        <button class="btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
       </div>
     </div>
   </div>
 
-  <!-- Application Logic -->
-  <script src="app.js?v=2.1"></script>
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-notification" id="toast">Item added</div>
+
+  <!-- Main JavaScript File -->
+  <script src="app.js"></script>
 </body>
 </html>

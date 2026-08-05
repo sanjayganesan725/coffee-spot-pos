@@ -675,6 +675,24 @@ function checkoutCart(shouldPrint = true) {
   updateKPIs();
 }
 
+function generatePhonePeQRUrl(amount, billNo) {
+  const upiId = 'Q516961806@ybl';
+  const storeName = 'Coffee Spot';
+  const upiUri = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(storeName)}&am=${amount || 0}&cu=INR&tn=${encodeURIComponent('Bill#' + (billNo || '1'))}`;
+  
+  if (typeof qrcode !== 'undefined') {
+    try {
+      const qr = qrcode(0, 'M');
+      qr.addData(upiUri);
+      qr.make();
+      return qr.createDataURL(6, 0);
+    } catch(e) {
+      console.warn('QR code generation warning:', e);
+    }
+  }
+  return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=0&data=${encodeURIComponent(upiUri)}`;
+}
+
 function showReceiptModal(bill) {
   let modalOverlay = document.getElementById('dynamicReceiptModal');
   if (!modalOverlay) {
@@ -696,11 +714,13 @@ function showReceiptModal(bill) {
     </tr>
   `).join('');
 
+  const qrImageUrl = generatePhonePeQRUrl(bill.grandTotal, bill.billNo);
+
   modalOverlay.innerHTML = `
     <div style="background: #ffffff; color: #000000; border-radius: 16px; padding: 24px; max-width: 400px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.5); font-family: 'Space Mono', monospace, sans-serif;">
       <div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 12px; margin-bottom: 12px;">
-        <h2 style="margin: 0; font-size: 1.4rem;">${storeInfo.name || 'Coffee Spot'}</h2>
-        <p style="margin: 2px 0 6px 0; font-size: 0.75rem; opacity: 0.8;">${storeInfo.tagline || ''}</p>
+        <h2 style="margin: 0; font-size: 1.4rem;">${typeof storeInfo !== 'undefined' && storeInfo.name ? storeInfo.name : 'Coffee Spot'}</h2>
+        <p style="margin: 2px 0 6px 0; font-size: 0.75rem; opacity: 0.8;">${typeof storeInfo !== 'undefined' && storeInfo.tagline ? storeInfo.tagline : 'Gandhigram Rural Institute, Chinnalapatti'}</p>
         <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: bold; margin-top: 8px;">
           <span>Bill #${bill.billNo}</span>
           <span>Token #${bill.tokenNo}</span>
@@ -742,7 +762,27 @@ function showReceiptModal(bill) {
         </div>
       </div>
 
-      <div style="margin-top: 20px; display: flex; gap: 10px;">
+      <!-- PhonePe UPI Payment QR Section -->
+      <div style="margin-top: 14px; padding: 12px; border: 2px solid #5f259f; border-radius: 12px; background: #FAF7FF; text-align: center;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 6px;">
+          <div style="background: #5f259f; color: #ffffff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; font-family: sans-serif;">पे</div>
+          <span style="font-size: 1.1rem; font-weight: 800; color: #5f259f; font-family: sans-serif; letter-spacing: -0.5px;">PhonePe</span>
+        </div>
+
+        <div style="background: #ffffff; padding: 8px; display: inline-block; border-radius: 8px; border: 1px solid #e2e8f0; margin: 4px 0;">
+          <img src="${qrImageUrl}" alt="PhonePe UPI QR Code" style="width: 150px; height: 150px; display: block; margin: 0 auto;" />
+        </div>
+
+        <div style="font-size: 0.85rem; font-weight: 700; color: #0f172a; margin-top: 4px; font-family: monospace; letter-spacing: 0.2px;">
+          UPI ID: Q516961806@ybl
+        </div>
+
+        <div style="margin-top: 6px; font-size: 0.7rem; font-weight: 700; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 4px;">
+          <span>BHIM | UPI</span> &bull; <span>Scan & Pay via Any UPI App</span>
+        </div>
+      </div>
+
+      <div class="no-print" style="margin-top: 20px; display: flex; gap: 10px;">
         <button onclick="window.print()" style="flex: 1; background: #1F5C4F; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">🖨️ Print Receipt</button>
         <button onclick="document.getElementById('dynamicReceiptModal').style.display='none'" style="flex: 1; background: #334155; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">✅ Next Order</button>
       </div>

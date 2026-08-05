@@ -1,15 +1,15 @@
 {
-  "name": "Coffee Spot POS",
+  "name": "Coffee Spot — POS & Billing Machine",
   "short_name": "Coffee POS",
-  "start_url": "./index.html",
+  "description": "Counter Billing Machine, Inventory, Ledger & Financial Accounting App for Coffee Shops & Cafes",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#1F5C4F",
   "theme_color": "#1F5C4F",
-  "description": "Coffee Spot Point of Sale & Thermal Billing Machine",
   "icons": [
     {
       "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231F5C4F'/><text y='65' x='50' font-size='50' text-anchor='middle'>☕</text></svg>",
-      "sizes": "192x192",
+      "sizes": "192x192 512x512",
       "type": "image/svg+xml"
     }
   ]
