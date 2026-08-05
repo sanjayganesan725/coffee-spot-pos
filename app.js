@@ -131,13 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // ---------- STORAGE HELPERS ----------
 function loadCatalog() {
   try {
-    const raw = localStorage.getItem('coffee_pos:catalog_v1');
-    let loaded = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_CATALOG));
-    
-    // Replace / merge with new multi-variant catalog structure
-    loaded = JSON.parse(JSON.stringify(DEFAULT_CATALOG));
-
-    localStorage.setItem('coffee_pos:catalog_v1', JSON.stringify(loaded));
+    let loaded = JSON.parse(JSON.stringify(DEFAULT_CATALOG));
+    localStorage.setItem('coffee_pos:catalog_v3', JSON.stringify(loaded));
     return loaded;
   } catch (e) {
     return JSON.parse(JSON.stringify(DEFAULT_CATALOG));
