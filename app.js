@@ -1377,27 +1377,36 @@ function initHotkeys() {
   });
 }
 
+function onEvent(id, eventName, handler) {
+  const el = $(id);
+  if (el) {
+    el[eventName] = handler;
+  }
+}
+
 // ---------- EVENT BINDINGS ----------
 function bindEvents() {
-  $('editShopBtn').onclick = () => openModal('storeModal');
-  $('saveStoreBtn').onclick = () => {
-    storeInfo.name = $('storeNameInput').value.trim() || 'Coffee Spot';
-    storeInfo.tagline = $('storeTagInput').value.trim();
-    storeInfo.upi = $('storeUpiInput').value.trim();
-    storeInfo.footer = $('storeFooterInput').value.trim();
-    storeInfo.audioEnabled = $('audioToggleInput').checked;
+  onEvent('editShopBtn', 'onclick', () => openModal('storeModal'));
+  onEvent('saveStoreBtn', 'onclick', () => {
+    storeInfo.name = $('storeNameInput') ? ($('storeNameInput').value.trim() || 'Coffee Spot') : 'Coffee Spot';
+    storeInfo.tagline = $('storeTagInput') ? $('storeTagInput').value.trim() : '';
+    storeInfo.upi = $('storeUpiInput') ? $('storeUpiInput').value.trim() : '';
+    storeInfo.footer = $('storeFooterInput') ? $('storeFooterInput').value.trim() : '';
+    storeInfo.audioEnabled = $('audioToggleInput') ? $('audioToggleInput').checked : true;
     saveStoreInfo();
     initStoreBranding();
     closeModal('storeModal');
     showToast('Settings Saved');
-  };
+  });
 
-  $('openCatalogBtn').onclick = () => {
+  onEvent('openCatalogBtn', 'onclick', () => {
     renderCatalogTable();
     openModal('catalogModal');
-  };
-  $('saveItemBtn').onclick = saveCatalogItem;
-  $('resetCatalogBtn').onclick = () => {
+  });
+  if (typeof saveCatalogItem === 'function') {
+    onEvent('saveItemBtn', 'onclick', saveCatalogItem);
+  }
+  onEvent('resetCatalogBtn', 'onclick', () => {
     if (confirm('Reset menu to default items?')) {
       catalog = JSON.parse(JSON.stringify(DEFAULT_CATALOG));
       saveCatalog();
@@ -1406,46 +1415,51 @@ function bindEvents() {
       renderCatalogTable();
       showToast('Menu Reset to Default');
     }
-  };
+  });
 
-  $('openRecentBillsBtn').onclick = () => {
+  onEvent('openRecentBillsBtn', 'onclick', () => {
     renderRecentBillsTable();
     openModal('recentBillsModal');
-  };
+  });
 
-  $('billsFilterButtons').onclick = (e) => {
-    if (e.target.classList.contains('btn-chip')) {
-      document.querySelectorAll('#billsFilterButtons .btn-chip').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      billsFilterStatus = e.target.getAttribute('data-filter');
-      renderRecentBillsTable();
-    }
-  };
+  const billsFilterButtons = $('billsFilterButtons');
+  if (billsFilterButtons) {
+    billsFilterButtons.onclick = (e) => {
+      if (e.target.classList.contains('btn-chip')) {
+        document.querySelectorAll('#billsFilterButtons .btn-chip').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        billsFilterStatus = e.target.getAttribute('data-filter');
+        renderRecentBillsTable();
+      }
+    };
+  }
 
-  $('billSearchInput').oninput = renderRecentBillsTable;
+  onEvent('billSearchInput', 'oninput', renderRecentBillsTable);
 
-  $('openCustomerLedgerBtn').onclick = () => {
+  onEvent('openCustomerLedgerBtn', 'onclick', () => {
     renderCustomerLedger();
     openModal('ledgerModal');
-  };
-  $('ledgerSearchInput').oninput = renderCustomerLedger;
+  });
+  onEvent('ledgerSearchInput', 'oninput', renderCustomerLedger);
 
-  $('openExpensesBtn').onclick = () => {
+  onEvent('openExpensesBtn', 'onclick', () => {
     initExpensesView();
     openModal('expensesModal');
-  };
+  });
 
-  $('addNewLabourBtn').onclick = addNewLabourItem;
-  $('saveLabourBtn').onclick = () => {
+  if (typeof addNewLabourItem === 'function') {
+    onEvent('addNewLabourBtn', 'onclick', addNewLabourItem);
+  }
+  onEvent('saveLabourBtn', 'onclick', () => {
     saveLabour(currentDate, currentLabourers);
     updateKPIs();
     showToast('💾 Staff Roster & Daily Wages Saved');
-  };
+  });
 
-  $('addExpenseBtn').onclick = () => {
-    const title = $('expenseTitleInput').value.trim();
-    const amount = parseFloat($('expenseAmountInput').value) || 0;
-    const cat = $('expenseCatInput').value;
+  onEvent('addExpenseBtn', 'onclick', () => {
+    const title = $('expenseTitleInput') ? $('expenseTitleInput').value.trim() : '';
+    const amount = $('expenseAmountInput') ? (parseFloat($('expenseAmountInput').value) || 0) : 0;
+    const cat = $('expenseCatInput') ? $('expenseCatInput').value : 'Misc';
 
     if (!title || amount <= 0) {
       alert('Please specify a title and amount.');
@@ -1456,17 +1470,17 @@ function bindEvents() {
     exps.push({ title: title, amount: amount, category: cat });
     saveExpenses(currentDate, exps);
 
-    $('expenseTitleInput').value = '';
-    $('expenseAmountInput').value = '';
+    if ($('expenseTitleInput')) $('expenseTitleInput').value = '';
+    if ($('expenseAmountInput')) $('expenseAmountInput').value = '';
     renderExpensesTable();
     updateKPIs();
     showToast('Expense Recorded');
-  };
+  });
 
-  $('openReportsBtn').onclick = () => {
+  onEvent('openReportsBtn', 'onclick', () => {
     renderFinancialReports();
     openModal('reportsModal');
-  };
+  });
 
   document.querySelectorAll('.report-tab').forEach(btn => {
     btn.onclick = () => {
@@ -1477,34 +1491,36 @@ function bindEvents() {
     };
   });
 
-  $('openAnalyticsBtn').onclick = () => {
+  onEvent('openAnalyticsBtn', 'onclick', () => {
     renderAnalytics();
     openModal('analyticsModal');
-  };
+  });
 
-  $('backupDataBtn').onclick = () => openModal('backupModal');
-  $('downloadBackupBtn').onclick = downloadBackup;
-  $('triggerRestoreBtn').onclick = () => $('restoreFileInput').click();
-  $('restoreFileInput').onchange = (e) => {
-    if (e.target.files.length > 0) restoreBackup(e.target.files[0]);
-  };
-
-  $('exportCsvBtn').onclick = exportSalesCsv;
-  $('loadSampleBtn').onclick = loadDemoData;
-
-  $('clearCartBtn').onclick = clearCart;
-  $('checkoutPrintBtn').onclick = () => checkoutCart(true);
-  $('checkoutSaveBtn').onclick = () => checkoutCart(false);
-
-  $('cartDiscount').oninput = updateCartTotals;
-  $('cashGiven').oninput = updateCartTotals;
-
-  $('itemSearch').oninput = renderCatalogGrid;
-
-  // Mobile navigation
-  if ($('mCheckoutBtn')) {
-    $('mCheckoutBtn').onclick = () => checkoutCart(true);
+  onEvent('backupDataBtn', 'onclick', () => openModal('backupModal'));
+  onEvent('downloadBackupBtn', 'onclick', downloadBackup);
+  onEvent('triggerRestoreBtn', 'onclick', () => { if ($('restoreFileInput')) $('restoreFileInput').click(); });
+  const restoreFileInput = $('restoreFileInput');
+  if (restoreFileInput) {
+    restoreFileInput.onchange = (e) => {
+      if (e.target.files.length > 0) restoreBackup(e.target.files[0]);
+    };
   }
+
+  onEvent('exportCsvBtn', 'onclick', exportSalesCsv);
+  onEvent('loadSampleBtn', 'onclick', loadDemoData);
+
+  // Cart & Checkout Action Buttons
+  onEvent('clearCartBtn', 'onclick', clearCart);
+  onEvent('checkoutPrintBtn', 'onclick', () => checkoutCart(true));
+  onEvent('checkoutSaveBtn', 'onclick', () => checkoutCart(false));
+
+  onEvent('cartDiscount', 'oninput', updateCartTotals);
+  onEvent('cashGiven', 'oninput', updateCartTotals);
+  onEvent('itemSearch', 'oninput', renderCatalogGrid);
+
+  // Mobile navigation & additional checkout buttons
+  onEvent('mCheckoutBtn', 'onclick', () => checkoutCart(true));
+  onEvent('checkoutBtn', 'onclick', () => checkoutCart(true));
 }
 
 // ---------- PWA SETUP ----------
