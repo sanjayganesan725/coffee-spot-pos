@@ -9,8 +9,6 @@ const DEFAULT_CATALOG = [
   { id: 'cat-3', cat: 'Beverages', name: 'Black Tea', price: 15, icon: '🍵', img: 'assets/tea.png', hotkey: '3', stock: 'instock' },
   { id: 'cat-4', cat: 'Beverages', name: 'Black Coffee', price: 15, icon: '☕', img: 'assets/coffee.png', hotkey: '4', stock: 'instock' },
   { id: 'cat-16', cat: 'Beverages', name: 'Water Bottle', price: 10, icon: '💧', img: 'assets/water.png', hotkey: '', stock: 'instock', variants: [10, 20] },
-  { id: 'cat-5', cat: 'Health Drinks', name: 'Boost', price: 20, icon: '🥛', hotkey: '5', stock: 'instock' },
-  { id: 'cat-6', cat: 'Health Drinks', name: 'Horlicks', price: 20, icon: '🥛', hotkey: '', stock: 'instock' },
   // Fresh Juices & Smoothies Category
   { id: 'juice-1', cat: 'Fresh Juices', name: 'Fresh Orange Juice', price: 40, icon: '🍊', hotkey: '9', stock: 'instock', variants: [40, 60, 80] },
   { id: 'juice-2', cat: 'Fresh Juices', name: 'Watermelon Fresh Juice', price: 30, icon: '🍉', hotkey: '0', stock: 'instock', variants: [30, 45, 60] },
@@ -140,19 +138,19 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadCatalog() {
   let defaultItems = JSON.parse(JSON.stringify(DEFAULT_CATALOG));
   try {
-    const raw = localStorage.getItem('coffee_pos:catalog_v6');
+    const raw = localStorage.getItem('coffee_pos:catalog_v7');
     if (raw) {
-      let saved = JSON.parse(raw);
+      let saved = JSON.parse(raw).filter(i => i.cat !== 'Health Drinks');
       defaultItems.forEach(dItem => {
         if (!saved.some(s => s.id === dItem.id)) {
           saved.push(dItem);
         }
       });
-      localStorage.setItem('coffee_pos:catalog_v6', JSON.stringify(saved));
+      localStorage.setItem('coffee_pos:catalog_v7', JSON.stringify(saved));
       return saved;
     }
   } catch (e) {}
-  localStorage.setItem('coffee_pos:catalog_v6', JSON.stringify(defaultItems));
+  localStorage.setItem('coffee_pos:catalog_v7', JSON.stringify(defaultItems));
   return defaultItems;
 }
 
