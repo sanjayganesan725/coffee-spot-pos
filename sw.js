@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coffee-spot-pos-v3';
+const CACHE_NAME = 'coffee-spot-pos-v4';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();

@@ -444,14 +444,38 @@ function renderCatalogGrid() {
 }
 
 function openVariantModal(item) {
-  $('variantItemTitle').textContent = `${item.icon || '☕'} ${item.name}`;
-  const grid = $('variantButtonsGrid');
-  grid.innerHTML = '';
+  let modalOverlay = document.getElementById('dynamicVariantModal');
+  if (!modalOverlay) {
+    modalOverlay = document.createElement('div');
+    modalOverlay.id = 'dynamicVariantModal';
+    modalOverlay.style.cssText = `
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px);
+      display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px;
+    `;
+    document.body.appendChild(modalOverlay);
+  }
+
+  modalOverlay.innerHTML = `
+    <div style="background: var(--bg-card, #1e293b); color: var(--text-main, #fff); border-radius: 16px; padding: 24px; max-width: 380px; width: 100%; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center; font-family: inherit;">
+      <h3 style="margin-bottom: 6px; font-size: 1.2rem; font-weight: 700;">${item.icon || '🥤'} ${item.name}</h3>
+      <p style="margin-bottom: 18px; font-size: 0.85rem; opacity: 0.8;">Select Portion / Price Variant:</p>
+      <div style="display: flex; flex-direction: column; gap: 10px;" id="variantButtonsContainer"></div>
+      <button onclick="document.getElementById('dynamicVariantModal').style.display='none'" style="margin-top: 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600;">Cancel</button>
+    </div>
+  `;
+
+  modalOverlay.style.display = 'flex';
+  const container = document.getElementById('variantButtonsContainer');
 
   item.variants.forEach(rate => {
     const vBtn = document.createElement('button');
-    vBtn.className = 'variant-btn';
-    vBtn.textContent = money(rate);
+    vBtn.style.cssText = `
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff; border: none; padding: 12px; border-radius: 10px;
+      font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: transform 0.1s;
+      display: flex; align-items: center; justify-content: space-between; padding: 12px 18px;
+    `;
+    vBtn.innerHTML = `<span>Portion Variant</span> <span>₹${rate}</span>`;
     vBtn.onclick = () => {
       addToCart({
         id: item.id + '-' + rate,
@@ -459,13 +483,13 @@ function openVariantModal(item) {
         price: rate,
         icon: item.icon
       });
-      closeModal('variantModal');
+      modalOverlay.style.display = 'none';
+      showToast(`🛒 Added ${item.name} (₹${rate}) to order!`);
     };
-    grid.appendChild(vBtn);
+    container.appendChild(vBtn);
   });
-
-  openModal('variantModal');
 }
+
 function addToCart(item) {
   triggerHaptic();
   playChime('add');
@@ -498,6 +522,7 @@ function addToCart(item) {
     });
   }
   renderCart();
+  showToast(`🛒 Added ${item.name} to order!`);
 }
 
 function updateCartQty(id, delta) {
