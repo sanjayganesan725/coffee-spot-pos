@@ -1,52 +1,71 @@
 /* ==========================================================================
-   COFFEE SPOT POS — APPLICATION LOGIC
+   COFFEE SPOT POS — COMPLETE APPLICATION LOGIC
    ========================================================================== */
 
 // Default Catalog Structure (Coffee Spot Counter Menu)
 const DEFAULT_CATALOG = [
-  { id: 'cat-1', cat: 'Beverages (₹15)', name: 'Tea', price: 15, icon: '☕', hotkey: '1', stock: 'instock' },
-  { id: 'cat-2', cat: 'Beverages (₹15)', name: 'Coffee', price: 15, icon: '🥤', hotkey: '2', stock: 'instock' },
-  { id: 'cat-3', cat: 'Beverages (₹15)', name: 'Black Tea', price: 15, icon: '🍵', hotkey: '3', stock: 'instock' },
-  { id: 'cat-4', cat: 'Beverages (₹15)', name: 'Black Coffee', price: 15, icon: '☕', hotkey: '4', stock: 'instock' },
+  { id: 'cat-1', cat: 'Beverages', name: 'Tea', price: 15, icon: '☕', img: 'assets/tea.png', hotkey: '1', stock: 'instock' },
+  { id: 'cat-2', cat: 'Beverages', name: 'Coffee', price: 15, icon: '🥤', img: 'assets/coffee.png', hotkey: '2', stock: 'instock' },
+  { id: 'cat-3', cat: 'Beverages', name: 'Black Tea', price: 15, icon: '🍵', img: 'assets/tea.png', hotkey: '3', stock: 'instock' },
+  { id: 'cat-4', cat: 'Beverages', name: 'Black Coffee', price: 15, icon: '☕', img: 'assets/coffee.png', hotkey: '4', stock: 'instock' },
+  { id: 'cat-16', cat: 'Beverages', name: 'Water Bottle', price: 10, icon: '💧', img: 'assets/water.png', hotkey: '', stock: 'instock', variants: [10, 20] },
   { id: 'cat-5', cat: 'Health Drinks', name: 'Boost', price: 20, icon: '🥛', hotkey: '5', stock: 'instock' },
   { id: 'cat-6', cat: 'Health Drinks', name: 'Horlicks', price: 20, icon: '🥛', hotkey: '', stock: 'instock' },
-  { id: 'cat-7', cat: 'Snacks & Eats', name: 'Vada', price: 10, icon: '🧆', hotkey: '6', stock: 'instock' },
+  // Fresh Juices Category
+  { id: 'juice-1', cat: 'Fresh Juices', name: 'Fresh Orange Juice', price: 40, icon: '🍊', hotkey: '9', stock: 'instock', variants: [40, 60, 80] },
+  { id: 'juice-2', cat: 'Fresh Juices', name: 'Watermelon Fresh Juice', price: 30, icon: '🍉', hotkey: '0', stock: 'instock', variants: [30, 45, 60] },
+  { id: 'juice-3', cat: 'Fresh Juices', name: 'Fresh Mango Juice', price: 40, icon: '🥭', hotkey: '', stock: 'instock', variants: [40, 60, 80] },
+  { id: 'juice-4', cat: 'Fresh Juices', name: 'Pineapple Fresh Juice', price: 35, icon: '🍍', hotkey: '', stock: 'instock', variants: [35, 50, 70] },
+  { id: 'juice-5', cat: 'Fresh Juices', name: 'Apple Fresh Juice', price: 50, icon: '🍏', hotkey: '', stock: 'instock', variants: [50, 70, 90] },
+  { id: 'juice-6', cat: 'Fresh Juices', name: 'Anar / Pomegranate Juice', price: 60, icon: '🍇', hotkey: '', stock: 'instock', variants: [60, 80, 100] },
+  { id: 'juice-7', cat: 'Fresh Juices', name: 'Mosambi / Sweet Lime Juice', price: 40, icon: '🍋', hotkey: '', stock: 'instock', variants: [40, 60] },
+  { id: 'juice-8', cat: 'Fresh Juices', name: 'ABC Juice (Apple Beetroot Carrot)', price: 50, icon: '🥤', hotkey: '', stock: 'instock', variants: [50, 70, 90] },
+  { id: 'juice-9', cat: 'Fresh Juices', name: 'Green Detox Cleanse Juice', price: 50, icon: '🥬', hotkey: '', stock: 'instock', variants: [50, 70] },
+  { id: 'juice-10', cat: 'Fresh Juices', name: 'Fresh Grape Juice', price: 40, icon: '🍇', hotkey: '', stock: 'instock', variants: [40, 60] },
+  { id: 'juice-11', cat: 'Fresh Juices', name: 'Fresh Lime Soda / Mint Cooler', price: 30, icon: '🍹', hotkey: '', stock: 'instock', variants: [25, 30, 45] },
+  { id: 'juice-12', cat: 'Fresh Juices', name: 'Strawberry Smoothie', price: 60, icon: '🍓', hotkey: '', stock: 'instock', variants: [60, 80, 100] },
+  { id: 'juice-13', cat: 'Fresh Juices', name: 'Papaya Fresh Juice', price: 35, icon: '🍈', hotkey: '', stock: 'instock', variants: [35, 50] },
+  { id: 'cat-7', cat: 'Snacks & Eats', name: 'Vada', price: 10, icon: '🧆', img: 'assets/vada.png', hotkey: '6', stock: 'instock' },
   { id: 'cat-8', cat: 'Snacks & Eats', name: 'Cauliflower', price: 40, icon: '🥦', hotkey: '7', stock: 'instock' },
-  { id: 'cat-9', cat: 'Biscuits', name: 'Biscuits ₹5', price: 5, icon: '🍪', hotkey: '', stock: 'instock' },
-  { id: 'cat-10', cat: 'Biscuits', name: 'Biscuits ₹10', price: 10, icon: '🍪', hotkey: '8', stock: 'instock' },
-  { id: 'cat-11', cat: 'Biscuits', name: 'Biscuits ₹20', price: 20, icon: '🍪', hotkey: '9', stock: 'instock' },
-  { id: 'cat-12', cat: 'Biscuits', name: 'Biscuits ₹30', price: 30, icon: '🍪', hotkey: '', stock: 'instock' },
-  { id: 'cat-13', cat: 'Juice', name: 'Juice ₹20', price: 20, icon: '🧃', hotkey: '0', stock: 'instock' },
-  { id: 'cat-14', cat: 'Juice', name: 'Juice ₹25', price: 25, icon: '🧃', hotkey: '', stock: 'instock' },
-  { id: 'cat-15', cat: 'Juice', name: 'Juice ₹30', price: 30, icon: '🧃', hotkey: '', stock: 'instock' }
+  { id: 'cat-20', cat: 'Chocolates & Eats', name: 'Dairy Milk', price: 20, icon: '🍫', img: 'assets/chocolate.png', hotkey: '', stock: 'instock', variants: [20, 40, 100] },
+  { id: 'cat-21', cat: 'Chocolates & Eats', name: 'KitKat', price: 10, icon: '🍫', img: 'assets/chocolate.png', hotkey: '', stock: 'instock', variants: [10, 20, 40] },
+  { id: 'cat-22', cat: 'Chocolates & Eats', name: 'Kinder Joy', price: 100, icon: '🎁', img: 'assets/chocolate.png', hotkey: '', stock: 'instock', variants: [100] },
+  { id: 'cat-18', cat: 'Snacks & Eats', name: 'Chocolate', price: 40, icon: '🍫', img: 'assets/chocolate.png', hotkey: '', stock: 'instock', variants: [20, 40, 100] },
+  { id: 'cat-19', cat: 'Bakery & Eats', name: 'Bread Packet', price: 50, icon: '🍞', img: 'assets/bread.png', hotkey: '', stock: 'instock' },
+  { id: 'cat-9', cat: 'Biscuits', name: 'Biscuits', price: 10, icon: '🍪', hotkey: '8', stock: 'instock', variants: [5, 10, 20, 30] }
 ];
 
-// Helper functions
+// Default Labour Staff Roster (5 Shop Labours)
+const DEFAULT_LABOURERS = [
+  { id: 'lab-1', name: 'Tea Master (Ramesh)', wage: 400 },
+  { id: 'lab-2', name: 'Vada Master (Suresh)', wage: 350 },
+  { id: 'lab-3', name: 'Counter / Cashier (Priya)', wage: 300 },
+  { id: 'lab-4', name: 'Cleaning & Maintenance (Murugan)', wage: 250 },
+  { id: 'lab-5', name: 'Helper / Delivery (Karthik)', wage: 250 }
+];
+
+// Helper Functions
 const $ = id => document.getElementById(id);
-const money = n => "₹" + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const money = n => "₹" + Number(n || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const getTodayString = () => new Date().toISOString().slice(0, 10);
 
-// Application State
+// Application State Variables
 let catalog = loadCatalog();
 let currentDate = getTodayString();
 let cart = [];
 let selectedCategory = 'ALL';
-let paymentMethod = 'Cash';
-let paymentStatus = 'Paid';
 let billsFilterStatus = 'ALL';
 let storeInfo = loadStoreInfo();
+
 let globalBillNo = parseInt(localStorage.getItem('coffee_pos:bill_no')) || 101;
 let globalTokenNo = parseInt(localStorage.getItem('coffee_pos:token_no')) || 1;
 
 let selectedPeriodTab = 'daily';
-let selectedMonthStr = getTodayString().slice(0, 7);
-let selectedYearStr = getTodayString().slice(0, 4);
-
 let hourlyChartInstance = null;
 let categoryChartInstance = null;
 let summaryChartInstance = null;
 
-// Initialize App
+// Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initStoreBranding();
@@ -56,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCart();
   updateKPIs();
   bindEvents();
-  initMobileNavigation();
+  initHotkeys();
   initPWA();
 });
 
@@ -64,7 +83,13 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadCatalog() {
   try {
     const raw = localStorage.getItem('coffee_pos:catalog_v1');
-    return raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_CATALOG));
+    let loaded = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_CATALOG));
+    
+    // Replace / merge with new multi-variant catalog structure
+    loaded = JSON.parse(JSON.stringify(DEFAULT_CATALOG));
+
+    localStorage.setItem('coffee_pos:catalog_v1', JSON.stringify(loaded));
+    return loaded;
   } catch (e) {
     return JSON.parse(JSON.stringify(DEFAULT_CATALOG));
   }
@@ -89,7 +114,7 @@ function loadStoreInfo() {
     return {
       name: 'Coffee Spot',
       tagline: 'Gandhigram Rural Institute, Chinnalapatti, Dindigul',
-      upi: '',
+      upi: 'coffeespot@upi',
       footer: 'Thank you for visiting Coffee Spot! Have a wonderful day ☕',
       audioEnabled: true
     };
@@ -100,7 +125,72 @@ function saveStoreInfo() {
   localStorage.setItem('coffee_pos:store_info', JSON.stringify(storeInfo));
 }
 
-// Audio Chime Synthesizer using Web Audio API
+function loadSales(date) {
+  try {
+    const raw = localStorage.getItem('coffee_pos:sales:' + date);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveSales(date, salesList) {
+  localStorage.setItem('coffee_pos:sales:' + date, JSON.stringify(salesList));
+}
+
+function loadAllSalesKeys() {
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('coffee_pos:sales:')) {
+      keys.push(key.replace('coffee_pos:sales:', ''));
+    }
+  }
+  return keys.sort();
+}
+
+function loadLabour(date) {
+  try {
+    const raw = localStorage.getItem('coffee_pos:labour:' + date);
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_LABOURERS));
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed;
+    // Migrate old format { teaMaster, vadaMaster }
+    return [
+      { id: 'lab-1', name: 'Tea Master (Ramesh)', wage: parsed.teaMaster || 400 },
+      { id: 'lab-2', name: 'Vada Master (Suresh)', wage: parsed.vadaMaster || 350 },
+      { id: 'lab-3', name: 'Counter / Cashier (Priya)', wage: 300 },
+      { id: 'lab-4', name: 'Cleaning & Maintenance (Murugan)', wage: 250 },
+      { id: 'lab-5', name: 'Helper / Delivery (Karthik)', wage: 250 }
+    ];
+  } catch (e) {
+    return JSON.parse(JSON.stringify(DEFAULT_LABOURERS));
+  }
+}
+
+function getLabourTotal(date) {
+  const labourers = loadLabour(date);
+  return labourers.reduce((sum, l) => sum + (parseFloat(l.wage) || 0), 0);
+}
+
+function saveLabour(date, labourList) {
+  localStorage.setItem('coffee_pos:labour:' + date, JSON.stringify(labourList));
+}
+
+function loadExpenses(date) {
+  try {
+    const raw = localStorage.getItem('coffee_pos:expenses:' + date);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveExpenses(date, expenseList) {
+  localStorage.setItem('coffee_pos:expenses:' + date, JSON.stringify(expenseList));
+}
+
+// Web Audio API Sound Chime Synthesizer
 function playChime(type = 'add') {
   if (storeInfo.audioEnabled === false) return;
   try {
@@ -138,43 +228,28 @@ function playChime(type = 'add') {
   } catch (e) {}
 }
 
-function loadSales(date) {
-  try {
-    const raw = localStorage.getItem('coffee_pos:sales:' + date);
-    return raw ? JSON.parse(raw) : [];
-  } catch (e) {
-    return [];
-  }
+function triggerHaptic() {
+  if (navigator.vibrate) navigator.vibrate(25);
 }
 
-function saveSales(date, salesList) {
-  localStorage.setItem('coffee_pos:sales:' + date, JSON.stringify(salesList));
+// Toast Notifications
+function showToast(msg) {
+  const toast = $('toast');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
-function loadLabour(date) {
-  try {
-    const raw = localStorage.getItem('coffee_pos:labour:' + date);
-    return raw ? JSON.parse(raw) : { teaMaster: 0, vadaMaster: 0 };
-  } catch (e) {
-    return { teaMaster: 0, vadaMaster: 0 };
-  }
+// Modal Helpers
+function openModal(id) {
+  const m = $(id);
+  if (m) m.classList.add('active');
 }
 
-function saveLabour(date, labourObj) {
-  localStorage.setItem('coffee_pos:labour:' + date, JSON.stringify(labourObj));
-}
-
-function loadExpenses(date) {
-  try {
-    const raw = localStorage.getItem('coffee_pos:expenses:' + date);
-    return raw ? JSON.parse(raw) : [];
-  } catch (e) {
-    return [];
-  }
-}
-
-function saveExpenses(date, expenseList) {
-  localStorage.setItem('coffee_pos:expenses:' + date, JSON.stringify(expenseList));
+function closeModal(id) {
+  const m = $(id);
+  if (m) m.classList.remove('active');
 }
 
 // ---------- THEME & STORE BRANDING ----------
@@ -196,8 +271,8 @@ function initStoreBranding() {
   $('storeNameInput').value = storeInfo.name;
   $('storeTagInput').value = storeInfo.tagline;
   $('storeUpiInput').value = storeInfo.upi || '';
-  if ($('storeFooterInput')) $('storeFooterInput').value = storeInfo.footer || '';
-  if ($('audioToggleInput')) $('audioToggleInput').checked = storeInfo.audioEnabled !== false;
+  $('storeFooterInput').value = storeInfo.footer || '';
+  $('audioToggleInput').checked = storeInfo.audioEnabled !== false;
 }
 
 // ---------- DATE NAVIGATION ----------
@@ -238,7 +313,7 @@ function updateDateLabel() {
   $('dateSubLabel').textContent = (currentDate === today) ? 'Today\'s Sales' : currentDate;
 }
 
-// ---------- CATEGORY & QUICK POS TOUCH GRID ----------
+// ---------- CATEGORY & POS TOUCH GRID ----------
 function initCategoryTabs() {
   const categories = ['ALL', ...new Set(catalog.map(i => i.cat))];
   const container = $('categoryTabs');
@@ -280,7 +355,7 @@ function renderCatalogGrid() {
   });
 
   if (filtered.length === 0) {
-    grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px 10px; color: var(--text-muted);">No items found.</div>`;
+    grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px 10px; color: var(--text-muted);">No items found matching filter.</div>`;
     return;
   }
 
@@ -294,17 +369,29 @@ function renderCatalogGrid() {
         showToast(`❌ ${item.name} is currently Out of Stock`);
         return;
       }
-      addToCart(item);
+      if (item.variants && item.variants.length > 1) {
+        openVariantModal(item);
+      } else {
+        addToCart(item);
+      }
     };
 
     const hkHtml = item.hotkey ? `<span class="hk-badge" title="Hotkey: ${item.hotkey}">${item.hotkey}</span>` : '';
-    const stockBadgeHtml = isLow ? `<span class="badge-lowstock" style="font-size:0.65rem; margin-top:2px;">Low Stock</span>` : (isOut ? `<span class="badge-outstock" style="font-size:0.65rem; margin-top:2px;">Out of Stock</span>` : '');
+    const stockBadgeHtml = isLow ? `<span class="badge-lowstock" style="font-size:0.65rem;">Low Stock</span>` : (isOut ? `<span class="badge-outstock" style="font-size:0.65rem;">Out of Stock</span>` : '');
+
+    const visualContent = item.img ? 
+      `<div class="btn-3d-wrapper"><img src="${item.img}" class="btn-3d-img" alt="${item.name}"></div>` :
+      `<div class="btn-3d-wrapper"><span class="btn-emoji">${item.icon || '☕'}</span></div>`;
+
+    const priceLabel = item.variants && item.variants.length > 1 ? 
+      `₹${Math.min(...item.variants)}-₹${Math.max(...item.variants)}` : 
+      money(item.price);
 
     btn.innerHTML = `
       ${hkHtml}
-      <span class="btn-emoji">${item.icon || '☕'}</span>
+      ${visualContent}
       <span class="btn-title">${item.name}</span>
-      <span class="btn-price">${money(item.price)}</span>
+      <span class="btn-price">${priceLabel}</span>
       ${stockBadgeHtml}
     `;
 
@@ -312,7 +399,29 @@ function renderCatalogGrid() {
   });
 }
 
-// ---------- CART OPERATIONS ----------
+function openVariantModal(item) {
+  $('variantItemTitle').textContent = `${item.icon || '☕'} ${item.name}`;
+  const grid = $('variantButtonsGrid');
+  grid.innerHTML = '';
+
+  item.variants.forEach(rate => {
+    const vBtn = document.createElement('button');
+    vBtn.className = 'variant-btn';
+    vBtn.textContent = money(rate);
+    vBtn.onclick = () => {
+      addToCart({
+        id: item.id + '-' + rate,
+        name: `${item.name} (₹${rate})`,
+        price: rate,
+        icon: item.icon
+      });
+      closeModal('variantModal');
+    };
+    grid.appendChild(vBtn);
+  });
+
+  openModal('variantModal');
+}
 function addToCart(item) {
   triggerHaptic();
   playChime('add');
@@ -328,7 +437,7 @@ function addToCart(item) {
       icon: item.icon
     }];
     renderCart();
-    checkoutCart();
+    checkoutCart(true); // Print immediately
     return;
   }
 
@@ -375,7 +484,7 @@ function renderCart() {
     tbody.innerHTML = `
       <tr class="empty-cart-row">
         <td colspan="5" style="text-align:center; padding: 40px 10px; color: var(--text-muted);">
-          🛒 Cart is empty<br><small>Click any menu item or use hotkeys [1-9, 0]</small>
+          🛒 Cart is empty<br><small>Tap any item or use hotkeys [1-9, 0]</small>
         </td>
       </tr>
     `;
@@ -415,78 +524,33 @@ function updateCartTotals() {
   $('cartSubtotal').textContent = money(subtotal);
   $('cartGrandTotal').textContent = money(grandTotal);
 
-  // Update Change Calculator
+  // Cash Calculator
   const cashGiven = parseFloat($('cashGiven').value) || 0;
   const changeDue = Math.max(0, cashGiven - grandTotal);
   $('changeDue').textContent = money(changeDue);
 
   $('nextTokenNo').textContent = globalTokenNo;
 
-  // Mobile Floating Cart & Navigation Badge Updates
+  // Mobile Floating Cart Updates
   if ($('mCartCount')) $('mCartCount').textContent = totalItemCount;
   if ($('mCartTotal')) $('mCartTotal').textContent = money(grandTotal);
-  if ($('mnavCartBadge')) $('mnavCartBadge').textContent = totalItemCount;
-
-  const floatBar = $('mobileFloatingCartBar');
-  if (floatBar) {
-    if (cart.length > 0 && window.innerWidth <= 768) {
-      floatBar.style.display = 'flex';
-    } else {
-      floatBar.style.display = 'none';
-    }
+  if ($('mobileCartBar')) {
+    $('mobileCartBar').style.display = totalItemCount > 0 ? 'flex' : 'none';
   }
 }
 
-function initMobileNavigation() {
-  const posLeft = document.querySelector('.pos-left');
-  const posRight = document.querySelector('.pos-right');
-
-  const mnavPos = $('mnavPos');
-  const mnavCart = $('mnavCart');
-  const mnavLedger = $('mnavLedger');
-  const mnavExpenses = $('mnavExpenses');
-  const mnavReports = $('mnavReports');
-  const mCheckoutBtn = $('mCheckoutBtn');
-
-  function showMobileView(view) {
-    document.querySelectorAll('.m-nav-item').forEach(b => b.classList.remove('active'));
-
-    if (view === 'pos') {
-      if (mnavPos) mnavPos.classList.add('active');
-      if (posLeft) posLeft.classList.remove('mobile-hidden');
-      if (posRight) posRight.classList.add('mobile-hidden');
-    } else if (view === 'cart') {
-      if (mnavCart) mnavCart.classList.add('active');
-      if (posLeft) posLeft.classList.add('mobile-hidden');
-      if (posRight) posRight.classList.remove('mobile-hidden');
-    }
-  }
-
-  if (mnavPos) mnavPos.onclick = () => showMobileView('pos');
-  if (mnavCart) mnavCart.onclick = () => showMobileView('cart');
-  if (mCheckoutBtn) mCheckoutBtn.onclick = () => showMobileView('cart');
-
-  if (mnavLedger) mnavLedger.onclick = () => openCustomerLedger();
-  if (mnavExpenses) mnavExpenses.onclick = () => openExpensesManager();
-  if (mnavReports) mnavReports.onclick = () => openReportsManager();
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-      if (posLeft) posLeft.classList.remove('mobile-hidden');
-      if (posRight) posRight.classList.remove('mobile-hidden');
-      if ($('mobileFloatingCartBar')) $('mobileFloatingCartBar').style.display = 'none';
-    } else {
-      updateCartTotals();
-    }
-  });
-
-  if (window.innerWidth <= 768) {
-    showMobileView('pos');
-  }
+function clearCart() {
+  cart = [];
+  $('customerName').value = '';
+  $('customerDept').value = '';
+  $('customerPhone').value = '';
+  $('cartDiscount').value = '0';
+  $('cashGiven').value = '';
+  renderCart();
 }
 
-// ---------- CHECKOUT & BILL GENERATION ----------
-function checkoutCart() {
+// ---------- CHECKOUT & RECEIPT GENERATION ----------
+function checkoutCart(shouldPrint = true) {
   if (cart.length === 0) {
     showToast('⚠️ Cart is empty! Add items first.');
     return;
@@ -497,837 +561,559 @@ function checkoutCart() {
   const discountAmount = (subtotal * discountPercent) / 100;
   const grandTotal = Math.max(0, subtotal - discountAmount);
 
-  const billNo = globalBillNo++;
-  const tokenNo = globalTokenNo++;
-  localStorage.setItem('coffee_pos:bill_no', globalBillNo);
-  localStorage.setItem('coffee_pos:token_no', globalTokenNo);
+  const paymentMethod = $('paymentMethodSelect').value;
+  const paymentStatus = (paymentMethod === 'Credit') ? 'Pending' : $('paymentStatusSelect').value;
 
-  const now = new Date();
-  const dateStr = currentDate;
-  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  const dateTimeFormatted = `${dateStr} ${timeStr}`;
-
-  const custName = $('customerName').value.trim() || 'Walk-in Customer';
-  const custDept = $('customerDept').value.trim() || 'General';
-  const custPhone = $('customerPhone').value.trim() || '—';
-
-  const saleRecord = {
-    billNo: billNo,
-    tokenNo: tokenNo,
-    date: dateStr,
-    time: timeStr,
-    buyingDateTime: dateTimeFormatted,
-    timestamp: now.getTime(),
-    customerName: custName,
-    customerDept: custDept,
-    customerPhone: custPhone,
+  const billRecord = {
+    billNo: globalBillNo,
+    tokenNo: globalTokenNo,
+    date: currentDate,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     orderType: $('orderType').value,
-    paymentMethod: paymentMethod,
-    paymentStatus: paymentStatus, // 'Paid' or 'Unpaid'
+    customerName: $('customerName').value.trim() || 'Walk-in Customer',
+    customerDept: $('customerDept').value.trim(),
+    customerPhone: $('customerPhone').value.trim(),
     items: JSON.parse(JSON.stringify(cart)),
     subtotal: subtotal,
     discountPercent: discountPercent,
     discountAmount: discountAmount,
     grandTotal: grandTotal,
-    cashGiven: parseFloat($('cashGiven').value) || grandTotal
+    paymentMethod: paymentMethod,
+    paymentStatus: paymentStatus
   };
 
-  // Save to daily sales
+  // Save Sale Record
   const sales = loadSales(currentDate);
-  sales.push(saleRecord);
+  sales.push(billRecord);
   saveSales(currentDate, sales);
 
-  const statusLabel = paymentStatus === 'Unpaid' ? '⏳ UNPAID (DEBT)' : '✅ PAID';
+  // Increment Global Counters
+  globalBillNo += 1;
+  globalTokenNo += 1;
+  localStorage.setItem('coffee_pos:bill_no', globalBillNo);
+  localStorage.setItem('coffee_pos:token_no', globalTokenNo);
+
   playChime('complete');
-  showToast(`Bill #${billNo} Issued! (${statusLabel})`);
+  showToast(`✅ Bill #${billRecord.billNo} Saved!`);
 
-  // Render receipt & open modal
-  renderReceiptModal(saleRecord);
-  openModal('receiptModal');
+  // Render Receipt Modal
+  renderReceiptModal(billRecord);
 
-  // Reset cart & inputs
-  cart = [];
-  $('customerName').value = '';
-  $('customerDept').value = '';
-  $('customerPhone').value = '';
-  $('cashGiven').value = '';
-  $('cartDiscount').value = '0';
-  paymentStatus = 'Paid';
-  document.querySelectorAll('.btn-ps').forEach(b => b.classList.remove('active'));
-  document.querySelector('.btn-ps[data-status="Paid"]').classList.add('active');
-
-  renderCart();
+  // Reset Cart
+  clearCart();
   updateKPIs();
+
+  if (shouldPrint) {
+    openModal('receiptModal');
+  }
 }
 
-function renderReceiptModal(sale) {
-  $('rShopName').textContent = storeInfo.name;
-  $('rShopTag').textContent = storeInfo.tagline;
-  $('rBillNo').textContent = `#${sale.billNo}`;
-  $('rTokenNo').textContent = `#${sale.tokenNo}`;
-  $('rDate').textContent = sale.date;
-  $('rTime').textContent = sale.time;
-  $('rCustName').textContent = sale.customerName || 'Walk-in';
-  $('rCustDept').textContent = sale.customerDept || '—';
-  $('rCustPhone').textContent = sale.customerPhone || '—';
-  
-  const statusEl = $('rPayStatus');
-  statusEl.textContent = sale.paymentStatus === 'Unpaid' ? 'UNPAID (DEBT)' : 'PAID';
-  statusEl.style.color = sale.paymentStatus === 'Unpaid' ? 'var(--danger)' : 'var(--primary)';
+function renderReceiptModal(bill) {
+  $('recStoreName').textContent = storeInfo.name;
+  $('recStoreTag').textContent = storeInfo.tagline;
+  $('recBillNo').textContent = bill.billNo;
+  $('recTokenNo').textContent = bill.tokenNo;
+  $('recDateTime').textContent = `${bill.date} ${bill.time}`;
+  $('recOrderType').textContent = bill.orderType;
+  $('recFooterText').textContent = storeInfo.footer || 'Thank you for visiting!';
 
-  $('rOrderType').textContent = sale.orderType;
-  $('rPayMethod').textContent = sale.paymentMethod;
+  if (bill.customerName && bill.customerName !== 'Walk-in Customer') {
+    $('recCustomerRow').style.display = 'block';
+    $('recCustomerName').textContent = bill.customerName + (bill.customerDept ? ` (${bill.customerDept})` : '');
+  } else {
+    $('recCustomerRow').style.display = 'none';
+  }
 
-  const tbody = $('rTableBody');
+  const tbody = $('recItemsList');
   tbody.innerHTML = '';
-
-  sale.items.forEach(item => {
+  bill.items.forEach(item => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td style="text-align:left;">${item.name}</td>
       <td style="text-align:center;">${item.qty}</td>
-      <td style="text-align:right;">${item.price}</td>
-      <td style="text-align:right;">${item.price * item.qty}</td>
+      <td style="text-align:right;">${money(item.price)}</td>
+      <td style="text-align:right;">${money(item.price * item.qty)}</td>
     `;
     tbody.appendChild(tr);
   });
 
-  $('rSubtotal').textContent = money(sale.subtotal);
-  if (sale.discountAmount > 0) {
-    $('rDiscountRow').style.display = 'flex';
-    $('rDiscount').textContent = `-${money(sale.discountAmount)}`;
+  $('recSubtotal').textContent = money(bill.subtotal);
+  if (bill.discountAmount > 0) {
+    $('recDiscountRow').style.display = 'flex';
+    $('recDiscount').textContent = money(bill.discountAmount);
   } else {
-    $('rDiscountRow').style.display = 'none';
+    $('recDiscountRow').style.display = 'none';
   }
-  $('rGrandTotal').textContent = money(sale.grandTotal);
+  $('recGrandTotal').textContent = money(bill.grandTotal);
+  $('recPayMethod').textContent = `${bill.paymentMethod} (${bill.paymentStatus})`;
 
-  if ($('rFooterMessage')) {
-    $('rFooterMessage').textContent = storeInfo.footer || 'Thank you for visiting Coffee Spot! ☕';
-  }
+  // Render UPI QR Code if UPI ID configured
+  const qrWrap = $('receiptQrWrap');
+  const qrCanvas = $('receiptQrCanvas');
+  qrCanvas.innerHTML = '';
 
-  // Generate UPI QR Code
-  generateReceiptQR(sale.grandTotal);
-}
-
-function generateReceiptQR(amount) {
-  const qrContainer = $('receiptQrCode');
-  qrContainer.innerHTML = '';
-  const upiId = storeInfo.upi || 'coffeespot@upi';
-  const qrText = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(storeInfo.name)}&am=${amount}&cu=INR`;
-
-  try {
-    const typeNumber = 0;
-    const errorCorrectionLevel = 'L';
-    const qr = qrcode(typeNumber, errorCorrectionLevel);
-    qr.addData(qrText);
-    qr.make();
-    qrContainer.innerHTML = qr.createImgTag(4);
-  } catch (e) {
-    qrContainer.innerHTML = '<p style="font-size:0.7rem; color:#666;">QR unavailable</p>';
+  if (storeInfo.upi) {
+    qrWrap.style.display = 'flex';
+    try {
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(storeInfo.upi)}&pn=${encodeURIComponent(storeInfo.name)}&am=${bill.grandTotal}&cu=INR`;
+      const qr = qrcode(0, 'M');
+      qr.addData(upiUrl);
+      qr.make();
+      qrCanvas.innerHTML = qr.createImgTag(4);
+    } catch (e) {
+      qrWrap.style.display = 'none';
+    }
+  } else {
+    qrWrap.style.display = 'none';
   }
 }
 
-// ---------- KPI SUMMARY CARDS ----------
+// ---------- KPI METRICS UPDATER ----------
 function updateKPIs() {
   const sales = loadSales(currentDate);
-  const totalRev = sales.reduce((sum, s) => sum + s.grandTotal, 0);
-  const totalItems = sales.reduce((sum, s) => sum + s.items.reduce((iSum, i) => iSum + i.qty, 0), 0);
-  const totalTx = sales.length;
-  const aov = totalTx > 0 ? (totalRev / totalTx) : 0;
+  const totalSales = sales.reduce((sum, b) => sum + (b.paymentStatus === 'Paid' ? b.grandTotal : 0), 0);
+  const billsCount = sales.length;
 
-  // Category breakdown for Top Category KPI
-  const catMap = {};
-  sales.forEach(s => {
-    s.items.forEach(item => {
-      const catObj = catalog.find(c => c.name === item.name);
-      const catName = catObj ? catObj.cat : 'General';
-      catMap[catName] = (catMap[catName] || 0) + (item.price * item.qty);
-    });
-  });
+  const expenses = loadExpenses(currentDate);
+  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
 
-  let topCat = '—';
-  let topCatRevenue = 0;
-  Object.keys(catMap).forEach(cat => {
-    if (catMap[cat] > topCatRevenue) {
-      topCatRevenue = catMap[cat];
-      topCat = cat;
-    }
-  });
+  const totalLabour = getLabourTotal(currentDate);
 
-  const topCatShare = totalRev > 0 ? Math.round((topCatRevenue / totalRev) * 100) : 0;
+  const totalCost = totalExpenses + totalLabour;
+  const netProfit = totalSales - totalCost;
 
-  // Unpaid Debt Metrics
-  const unpaidSales = sales.filter(s => s.paymentStatus === 'Unpaid');
-  const totalDebt = unpaidSales.reduce((sum, s) => sum + s.grandTotal, 0);
-
-  $('dayTotal').textContent = money(totalRev);
-  $('dayItems').textContent = totalItems;
-  $('dayTx').textContent = totalTx;
-  $('dayAov').textContent = money(aov);
-  if ($('dayDebt')) $('dayDebt').textContent = money(totalDebt);
-  if ($('dayDebtCount')) $('dayDebtCount').textContent = `${unpaidSales.length} Unpaid Bill${unpaidSales.length === 1 ? '' : 's'}`;
-  $('dayTopCat').textContent = topCat;
-  $('dayTopCatShare').textContent = `${topCatShare}% of revenue`;
+  $('kpiTotalSales').textContent = money(totalSales);
+  $('kpiBillsCount').textContent = billsCount;
+  $('kpiExpenses').textContent = money(totalCost);
+  $('kpiNetProfit').textContent = money(netProfit);
 }
 
-// ---------- CATALOG MANAGER ----------
-function openCatalogManager() {
-  renderCatalogTable();
-  openModal('catalogModal');
-}
-
+// ---------- CATALOG MANAGEMENT MODAL ----------
 function renderCatalogTable() {
   const tbody = $('catalogTableBody');
   tbody.innerHTML = '';
-  $('catalogCount').textContent = catalog.length;
 
   catalog.forEach(item => {
-    const stockClass = item.stock === 'lowstock' ? 'badge-lowstock' : (item.stock === 'outstock' ? 'badge-outstock' : 'badge-instock');
-    const stockText = item.stock === 'lowstock' ? '⚠️ Low Stock' : (item.stock === 'outstock' ? '❌ Out of Stock' : '✅ In Stock');
-
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="font-size:1.3rem;">${item.icon || '☕'}</td>
+      <td>${item.icon || '☕'}</td>
       <td><strong>${item.name}</strong></td>
-      <td>${item.cat}</td>
-      <td style="font-family:var(--font-mono);">${money(item.price)}</td>
-      <td>${item.hotkey ? `<span class="hk-badge">${item.hotkey}</span>` : '—'}</td>
-      <td><span class="${stockClass}">${stockText}</span></td>
+      <td><span class="badge-chip">${item.cat}</span></td>
+      <td>${money(item.price)}</td>
+      <td><code>${item.hotkey || '-'}</code></td>
       <td>
-        <button class="btn-secondary btn-sm" onclick="editCatalogItem('${item.id}')">✏️ Edit</button>
-        <button class="btn-danger-outline btn-sm" onclick="deleteCatalogItem('${item.id}')">🗑️ Delete</button>
+        <select onchange="updateItemStock('${item.id}', this.value)">
+          <option value="instock" ${item.stock === 'instock' ? 'selected' : ''}>In Stock</option>
+          <option value="lowstock" ${item.stock === 'lowstock' ? 'selected' : ''}>Low Stock</option>
+          <option value="outstock" ${item.stock === 'outstock' ? 'selected' : ''}>Out of Stock</option>
+        </select>
+      </td>
+      <td>
+        <button class="btn-secondary" style="padding:2px 6px;" onclick="editCatalogItem('${item.id}')">✏️</button>
+        <button class="btn-secondary" style="padding:2px 6px; color:var(--danger);" onclick="deleteCatalogItem('${item.id}')">🗑️</button>
       </td>
     `;
     tbody.appendChild(tr);
   });
+}
+
+function updateItemStock(id, status) {
+  const item = catalog.find(i => i.id === id);
+  if (item) {
+    item.stock = status;
+    saveCatalog();
+    renderCatalogGrid();
+  }
 }
 
 function editCatalogItem(id) {
   const item = catalog.find(i => i.id === id);
   if (!item) return;
-
   $('editItemId').value = item.id;
-  $('itemCatInput').value = item.cat;
   $('itemNameInput').value = item.name;
+  $('itemCatInput').value = item.cat;
   $('itemPriceInput').value = item.price;
-  $('itemIconInput').value = item.icon || '';
+  $('itemIconInput').value = item.icon || '☕';
   $('itemHotkeyInput').value = item.hotkey || '';
-  $('itemStockSelect').value = item.stock || 'instock';
-
-  $('catalogFormTitle').textContent = 'Edit Item';
-  $('saveCatalogItemBtn').textContent = '💾 Update Item';
+  $('itemStockInput').value = item.stock || 'instock';
 }
 
 function deleteCatalogItem(id) {
-  if (confirm('Are you sure you want to delete this catalog item?')) {
+  if (confirm('Are you sure you want to delete this menu item?')) {
     catalog = catalog.filter(i => i.id !== id);
     saveCatalog();
     initCategoryTabs();
     renderCatalogGrid();
     renderCatalogTable();
-    showToast('Item deleted!');
+    showToast('🗑️ Item Deleted');
   }
 }
 
-// ---------- RECENT BILLS HISTORY ----------
-function openRecentBills() {
-  renderRecentBillsTable();
-  openModal('recentBillsModal');
+function saveCatalogItem() {
+  const id = $('editItemId').value;
+  const name = $('itemNameInput').value.trim();
+  const cat = $('itemCatInput').value.trim() || 'General';
+  const price = parseFloat($('itemPriceInput').value) || 0;
+  const icon = $('itemIconInput').value.trim() || '☕';
+  const hotkey = $('itemHotkeyInput').value.trim();
+  const stock = $('itemStockInput').value;
+
+  if (!name || price <= 0) {
+    alert('Please provide a valid item name and price.');
+    return;
+  }
+
+  if (id) {
+    const item = catalog.find(i => i.id === id);
+    if (item) {
+      item.name = name;
+      item.cat = cat;
+      item.price = price;
+      item.icon = icon;
+      item.hotkey = hotkey;
+      item.stock = stock;
+    }
+  } else {
+    catalog.push({
+      id: 'cat-' + Date.now(),
+      name: name,
+      cat: cat,
+      price: price,
+      icon: icon,
+      hotkey: hotkey,
+      stock: stock
+    });
+  }
+
+  saveCatalog();
+  initCategoryTabs();
+  renderCatalogGrid();
+  renderCatalogTable();
+  
+  // Clear inputs
+  $('editItemId').value = '';
+  $('itemNameInput').value = '';
+  $('itemCatInput').value = '';
+  $('itemPriceInput').value = '';
+  $('itemIconInput').value = '';
+  $('itemHotkeyInput').value = '';
+  showToast('✅ Menu Catalog Saved');
 }
 
+// ---------- RECENT BILLS MODAL ----------
 function renderRecentBillsTable() {
   const sales = loadSales(currentDate);
-  const searchQuery = $('billSearchInput').value.toLowerCase().trim();
-
-  const filtered = sales.filter(s => {
-    const matchBill = s.billNo.toString().includes(searchQuery);
-    const matchCust = (s.customerName || '').toLowerCase().includes(searchQuery);
-    const matchDept = (s.customerDept || '').toLowerCase().includes(searchQuery);
-    const matchPhone = (s.customerPhone || '').toLowerCase().includes(searchQuery);
-
-    const matchSearch = matchBill || matchCust || matchDept || matchPhone;
-    const matchStatus = (billsFilterStatus === 'ALL' || (s.paymentStatus || 'Paid') === billsFilterStatus);
-
-    return matchSearch && matchStatus;
-  });
-
   const tbody = $('recentBillsTableBody');
+  const searchQuery = $('billSearchInput') ? $('billSearchInput').value.toLowerCase().trim() : '';
+
   tbody.innerHTML = '';
 
-  const totalRev = filtered.reduce((sum, s) => sum + s.grandTotal, 0);
-  $('recentBillsTotal').textContent = money(totalRev);
-  $('recentBillsCount').textContent = filtered.length;
+  const filtered = sales.filter(b => {
+    const matchStatus = (billsFilterStatus === 'ALL') ? true :
+      (billsFilterStatus === 'Pending' ? b.paymentStatus === 'Pending' : b.paymentMethod === billsFilterStatus);
+
+    const matchSearch = b.billNo.toString().includes(searchQuery) ||
+      b.customerName.toLowerCase().includes(searchQuery) ||
+      b.customerDept.toLowerCase().includes(searchQuery);
+
+    return matchStatus && matchSearch;
+  });
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 20px; color: var(--text-muted);">No matching bills found for ${currentDate}.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:20px;">No recent bills found.</td></tr>`;
     return;
   }
 
-  filtered.slice().reverse().forEach(sale => {
-    const itemNames = sale.items.map(i => `${i.qty}x ${i.name}`).join(', ');
-    const isUnpaid = sale.paymentStatus === 'Unpaid';
-    const statusBadge = isUnpaid ? '<span class="badge-unpaid">⏳ Unpaid</span>' : '<span class="badge-paid">✅ Paid</span>';
-    const dateFormatted = sale.buyingDateTime || `${sale.date} ${sale.time}`;
-
+  filtered.forEach((b, idx) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><strong>#${sale.billNo}</strong> <small style="color:var(--text-muted);">(Tok #${sale.tokenNo})</small></td>
-      <td style="font-size:0.8rem; color:var(--ink-secondary);">${dateFormatted}</td>
+      <td><strong>#${b.billNo}</strong></td>
+      <td>${b.tokenNo}</td>
+      <td>${b.time}</td>
+      <td>${b.customerName} ${b.customerDept ? `<br><small>${b.customerDept}</small>` : ''}</td>
+      <td>${b.orderType}</td>
+      <td style="font-family:var(--font-mono); font-weight:bold;">${money(b.grandTotal)}</td>
+      <td>${b.paymentMethod}</td>
       <td>
-        <strong>${sale.customerName || 'Walk-in'}</strong>
-        <div style="font-size:0.75rem; color:var(--text-muted);">${sale.customerDept || '—'}</div>
+        <span class="badge-chip" style="background:${b.paymentStatus === 'Paid' ? 'var(--primary-light)' : 'var(--danger-light)'}; color:${b.paymentStatus === 'Paid' ? 'var(--primary)' : 'var(--danger)'}">
+          ${b.paymentStatus}
+        </span>
       </td>
-      <td style="font-family:var(--font-mono); font-size:0.8rem;">${sale.customerPhone || '—'}</td>
-      <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${itemNames}">${itemNames}</td>
-      <td style="font-family:var(--font-mono); font-weight:bold;">${money(sale.grandTotal)}</td>
       <td>
-        <div style="font-size:0.8rem; font-weight:600;">${sale.paymentMethod}</div>
-        ${statusBadge}
-      </td>
-      <td>
-        <div style="display:flex; gap:4px; flex-wrap:wrap;">
-          ${isUnpaid ? `<button class="btn-primary btn-sm" onclick="markBillAsPaid(${sale.billNo})">✅ Mark Paid</button>` : ''}
-          <button class="btn-secondary btn-sm" onclick="reprintBill(${sale.billNo})">🧾 Print</button>
-          <button class="btn-danger-outline btn-sm" onclick="voidBill(${sale.billNo})">Void</button>
-        </div>
+        <button class="btn-secondary" style="padding:2px 6px;" onclick="viewBillReceipt(${b.billNo})">🖨️</button>
+        <button class="btn-secondary" style="padding:2px 6px;" onclick="toggleBillStatus(${b.billNo})">🔄 Status</button>
+        <button class="btn-secondary" style="padding:2px 6px; color:var(--danger);" onclick="deleteBill(${b.billNo})">🗑️</button>
       </td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-function markBillAsPaid(billNo) {
-  let sales = loadSales(currentDate);
-  const sale = sales.find(s => s.billNo === billNo);
-  if (sale) {
-    sale.paymentStatus = 'Paid';
-    saveSales(currentDate, sales);
-    renderRecentBillsTable();
-    updateKPIs();
-    playChime('complete');
-    showToast(`✅ Bill #${billNo} Marked as PAID!`);
-  }
-}
-
-// ---------- CUSTOMER DEBT & LATE PAYMENT LEDGER ----------
-function getAllUnpaidSales() {
-  const dates = listAllSalesDates();
-  const unpaidSales = [];
-  dates.forEach(d => {
-    const sales = loadSales(d);
-    sales.forEach(s => {
-      if (s.paymentStatus === 'Unpaid') {
-        unpaidSales.push(s);
-      }
-    });
-  });
-  return unpaidSales;
-}
-
-function openCustomerLedger() {
-  renderCustomerLedgerTable();
-  openModal('customerLedgerModal');
-}
-
-function renderCustomerLedgerTable() {
-  const searchQuery = ($('ledgerSearchInput') ? $('ledgerSearchInput').value : '').toLowerCase().trim();
-  const allUnpaid = getAllUnpaidSales();
-
-  const customerMap = {};
-  let totalDebt = 0;
-  let totalUnpaidBills = allUnpaid.length;
-
-  allUnpaid.forEach(sale => {
-    const name = sale.customerName || 'Walk-in Customer';
-    const dept = sale.customerDept || 'General';
-    const phone = sale.customerPhone || '—';
-    const key = `${name}___${phone}`;
-
-    if (!customerMap[key]) {
-      customerMap[key] = {
-        name,
-        dept,
-        phone,
-        bills: [],
-        totalOwed: 0,
-        oldestTimestamp: sale.timestamp || Date.now()
-      };
-    }
-
-    customerMap[key].bills.push(sale);
-    customerMap[key].totalOwed += sale.grandTotal;
-    totalDebt += sale.grandTotal;
-    if (sale.timestamp && sale.timestamp < customerMap[key].oldestTimestamp) {
-      customerMap[key].oldestTimestamp = sale.timestamp;
-    }
-  });
-
-  const customerList = Object.values(customerMap).filter(c => {
-    const matchName = c.name.toLowerCase().includes(searchQuery);
-    const matchDept = c.dept.toLowerCase().includes(searchQuery);
-    const matchPhone = c.phone.toLowerCase().includes(searchQuery);
-    return matchName || matchDept || matchPhone;
-  }).sort((a, b) => b.totalOwed - a.totalOwed);
-
-  if ($('ledgerTotalDebt')) $('ledgerTotalDebt').textContent = money(totalDebt);
-  if ($('ledgerPendingCount')) $('ledgerPendingCount').textContent = `${Object.keys(customerMap).length} Unpaid Customers`;
-  if ($('ledgerBillCount')) $('ledgerBillCount').textContent = totalUnpaidBills;
-
-  if (customerList.length > 0) {
-    if ($('ledgerTopDebtor')) $('ledgerTopDebtor').textContent = customerList[0].name;
-    if ($('ledgerTopDebtorAmt')) $('ledgerTopDebtorAmt').textContent = money(customerList[0].totalOwed) + ' Owed';
-  } else {
-    if ($('ledgerTopDebtor')) $('ledgerTopDebtor').textContent = '—';
-    if ($('ledgerTopDebtorAmt')) $('ledgerTopDebtorAmt').textContent = '₹0.00 Owed';
-  }
-
-  const tbody = $('customerLedgerTableBody');
-  if (!tbody) return;
-  tbody.innerHTML = '';
-
-  if (customerList.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--text-muted);">🎉 No unpaid customer debts found! All accounts are fully settled.</td></tr>`;
-    return;
-  }
-
-  const nowMs = Date.now();
-
-  customerList.forEach(c => {
-    const billNumbers = c.bills.map(b => `#${b.billNo}`).join(', ');
-    const daysOld = Math.floor((nowMs - c.oldestTimestamp) / (1000 * 60 * 60 * 24));
-    const isOverdue = daysOld >= 7;
-    const statusBadge = isOverdue 
-      ? `<span class="badge-unpaid" style="background:#FEE2E2; color:#991B1B;">⚠️ Overdue (${daysOld}d)</span>`
-      : `<span class="badge-unpaid">⏳ Pending (${daysOld === 0 ? 'Today' : daysOld + 'd'})</span>`;
-
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><strong>${c.name}</strong></td>
-      <td>${c.dept}</td>
-      <td style="font-family:var(--font-mono); font-size:0.85rem;">${c.phone}</td>
-      <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${billNumbers}">${billNumbers} (${c.bills.length})</td>
-      <td style="font-family:var(--font-mono); font-weight:bold; color:var(--danger);">${money(c.totalOwed)}</td>
-      <td>${statusBadge}</td>
-      <td>
-        <button class="btn-primary btn-sm" onclick="settleCustomerDebt('${c.name.replace(/'/g, "\\'")}', '${c.phone.replace(/'/g, "\\'")}')">✅ Mark Paid</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function settleCustomerDebt(custName, custPhone) {
-  if (confirm(`Mark all pending bills as Paid for ${custName}?`)) {
-    const dates = listAllSalesDates();
-    let settledCount = 0;
-
-    dates.forEach(d => {
-      let sales = loadSales(d);
-      let updated = false;
-
-      sales.forEach(s => {
-        const nameMatch = (s.customerName || 'Walk-in Customer') === custName;
-        const phoneMatch = (s.customerPhone || '—') === custPhone;
-        if (nameMatch && phoneMatch && s.paymentStatus === 'Unpaid') {
-          s.paymentStatus = 'Paid';
-          s.paidTimestamp = Date.now();
-          updated = true;
-          settledCount++;
-        }
-      });
-
-      if (updated) {
-        saveSales(d, sales);
-      }
-    });
-
-    renderCustomerLedgerTable();
-    renderRecentBillsTable();
-    updateKPIs();
-    playChime('complete');
-    showToast(`✅ Settled ${settledCount} bill(s) for ${custName}!`);
-  }
-}
-
-function reprintBill(billNo) {
+function viewBillReceipt(billNo) {
   const sales = loadSales(currentDate);
-  const sale = sales.find(s => s.billNo === billNo);
-  if (sale) {
-    renderReceiptModal(sale);
+  const bill = sales.find(b => b.billNo === billNo);
+  if (bill) {
+    renderReceiptModal(bill);
     openModal('receiptModal');
   }
 }
 
-function voidBill(billNo) {
-  if (confirm(`Are you sure you want to void Bill #${billNo}?`)) {
-    let sales = loadSales(currentDate);
-    sales = sales.filter(s => s.billNo !== billNo);
+function toggleBillStatus(billNo) {
+  const sales = loadSales(currentDate);
+  const bill = sales.find(b => b.billNo === billNo);
+  if (bill) {
+    bill.paymentStatus = bill.paymentStatus === 'Paid' ? 'Pending' : 'Paid';
     saveSales(currentDate, sales);
     renderRecentBillsTable();
     updateKPIs();
-    showToast(`Bill #${billNo} Voided!`);
+    showToast(`Bill #${billNo} status updated to ${bill.paymentStatus}`);
   }
 }
 
-// ---------- ANALYTICS DASHBOARD ----------
-function openAnalytics() {
-  openModal('analyticsModal');
-  setTimeout(renderCharts, 150);
+function deleteBill(billNo) {
+  if (confirm(`Delete Bill #${billNo}?`)) {
+    let sales = loadSales(currentDate);
+    sales = sales.filter(b => b.billNo !== billNo);
+    saveSales(currentDate, sales);
+    renderRecentBillsTable();
+    updateKPIs();
+    showToast(`🗑️ Bill #${billNo} deleted`);
+  }
 }
 
-function renderCharts() {
-  const sales = loadSales(currentDate);
+// ---------- CUSTOMER LEDGER (KHATA / DEBT TRACKER) ----------
+function renderCustomerLedger() {
+  const keys = loadAllSalesKeys();
+  const customerMap = {};
 
-  // Hourly Chart Data
-  const hours = Array.from({ length: 14 }, (_, i) => i + 8); // 8 AM to 9 PM
-  const hourlyTotals = hours.map(h => {
-    return sales.filter(s => {
-      const sHour = new Date(s.timestamp || Date.now()).getHours();
-      return sHour === h;
-    }).reduce((sum, s) => sum + s.grandTotal, 0);
-  });
-
-  const hourLabels = hours.map(h => `${h > 12 ? h - 12 : h} ${h >= 12 ? 'PM' : 'AM'}`);
-
-  const ctxHourly = $('hourlySalesChart').getContext('2d');
-  if (hourlyChartInstance) hourlyChartInstance.destroy();
-
-  hourlyChartInstance = new Chart(ctxHourly, {
-    type: 'bar',
-    data: {
-      labels: hourLabels,
-      datasets: [{
-        label: 'Revenue (₹)',
-        data: hourlyTotals,
-        backgroundColor: '#1F5C4F',
-        borderRadius: 4
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  });
-
-  // Category Chart Data
-  const catMap = {};
-  sales.forEach(s => {
-    s.items.forEach(item => {
-      const catObj = catalog.find(c => c.name === item.name);
-      const catName = catObj ? catObj.cat : 'General';
-      catMap[catName] = (catMap[catName] || 0) + (item.price * item.qty);
+  keys.forEach(date => {
+    const sales = loadSales(date);
+    sales.forEach(b => {
+      if (b.paymentStatus === 'Pending' || b.paymentMethod === 'Credit') {
+        const nameKey = (b.customerName || 'Unknown Customer').trim();
+        if (!customerMap[nameKey]) {
+          customerMap[nameKey] = {
+            name: nameKey,
+            dept: b.customerDept || '',
+            phone: b.customerPhone || '',
+            pendingBills: [],
+            totalDebt: 0
+          };
+        }
+        customerMap[nameKey].pendingBills.push(b);
+        if (b.paymentStatus === 'Pending') {
+          customerMap[nameKey].totalDebt += b.grandTotal;
+        }
+      }
     });
   });
 
-  const catLabels = Object.keys(catMap);
-  const catData = Object.values(catMap);
+  const customerList = Object.values(customerMap);
+  const totalDebt = customerList.reduce((sum, c) => sum + c.totalDebt, 0);
+  const pendingCustomers = customerList.filter(c => c.totalDebt > 0).length;
 
-  const ctxCat = $('categoryRevenueChart').getContext('2d');
-  if (categoryChartInstance) categoryChartInstance.destroy();
+  $('ledgerTotalDebt').textContent = money(totalDebt);
+  $('ledgerPendingCustomersCount').textContent = pendingCustomers;
 
-  categoryChartInstance = new Chart(ctxCat, {
-    type: 'doughnut',
-    data: {
-      labels: catLabels.length ? catLabels : ['No Sales'],
-      datasets: [{
-        data: catData.length ? catData : [1],
-        backgroundColor: ['#1F5C4F', '#D97706', '#2EC4B6', '#E63946', '#F59E0B']
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  });
-
-  renderTopSellingTable();
-}
-
-function renderTopSellingTable() {
-  const sales = loadSales(currentDate);
-  const tbody = $('topSellingTableBody');
-  if (!tbody) return;
+  const tbody = $('ledgerTableBody');
+  const searchQuery = $('ledgerSearchInput') ? $('ledgerSearchInput').value.toLowerCase().trim() : '';
   tbody.innerHTML = '';
 
-  const itemStats = {};
-  let totalDayRev = 0;
+  const filtered = customerList.filter(c => c.name.toLowerCase().includes(searchQuery) || c.phone.includes(searchQuery));
 
-  sales.forEach(s => {
-    s.items.forEach(item => {
-      if (!itemStats[item.name]) {
-        const catObj = catalog.find(c => c.name === item.name);
-        itemStats[item.name] = {
-          name: item.name,
-          category: catObj ? catObj.cat : 'General',
-          units: 0,
-          revenue: 0
-        };
-      }
-      itemStats[item.name].units += item.qty;
-      const rev = item.price * item.qty;
-      itemStats[item.name].revenue += rev;
-      totalDayRev += rev;
-    });
-  });
-
-  const sortedList = Object.values(itemStats).sort((a, b) => b.revenue - a.revenue);
-
-  if (sortedList.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">No product sales recorded for ${currentDate}.</td></tr>`;
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px;">No pending customer ledger records.</td></tr>`;
     return;
   }
 
-  sortedList.forEach(item => {
-    const share = totalDayRev > 0 ? ((item.revenue / totalDayRev) * 100).toFixed(1) : '0';
+  filtered.forEach(c => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><strong>${item.name}</strong></td>
-      <td><span class="badge-instock">${item.category}</span></td>
-      <td style="font-family:var(--font-mono); text-align:center; font-weight:bold;">${item.units}</td>
-      <td style="font-family:var(--font-mono); font-weight:bold; color:var(--primary);">${money(item.revenue)}</td>
-      <td style="font-family:var(--font-mono);">${share}%</td>
+      <td><strong>${c.name}</strong></td>
+      <td>${c.dept || '-'}</td>
+      <td>${c.phone || '-'}</td>
+      <td>${c.pendingBills.length} Bills</td>
+      <td style="font-family:var(--font-mono); font-weight:bold; color:var(--danger);">${money(c.totalDebt)}</td>
+      <td>
+        <button class="btn-primary" style="padding:4px 8px; font-size:0.8rem;" onclick="clearCustomerDebt('${c.name}')">✅ Clear Debt</button>
+      </td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-// ---------- EXPENSES & LABOUR MANAGER ----------
-function openExpensesManager() {
-  const labour = loadLabour(currentDate);
-  $('teaMasterWage').value = labour.teaMaster || '';
-  $('vadaMasterWage').value = labour.vadaMaster || '';
-  $('expDateLabel').textContent = currentDate;
+function clearCustomerDebt(customerName) {
+  if (confirm(`Mark all pending credit bills as PAID for ${customerName}?`)) {
+    const keys = loadAllSalesKeys();
+    keys.forEach(date => {
+      let sales = loadSales(date);
+      let updated = false;
+      sales.forEach(b => {
+        if (b.customerName.trim() === customerName && b.paymentStatus === 'Pending') {
+          b.paymentStatus = 'Paid';
+          updated = true;
+        }
+      });
+      if (updated) saveSales(date, sales);
+    });
+
+    renderCustomerLedger();
+    updateKPIs();
+    showToast(`✅ Debt cleared for ${customerName}`);
+  }
+}
+
+// ---------- EXPENSES & LABOUR WAGES ----------
+let currentLabourers = [];
+
+function initExpensesView() {
+  $('expenseDateTitle').textContent = currentDate;
+  currentLabourers = loadLabour(currentDate);
+  renderLabourList();
   renderExpensesTable();
-  openModal('expensesModal');
+}
+
+function renderLabourList() {
+  const container = $('labourListContainer');
+  if (!container) return;
+  container.innerHTML = '';
+
+  let totalSum = 0;
+
+  currentLabourers.forEach((item, index) => {
+    totalSum += (parseFloat(item.wage) || 0);
+
+    const row = document.createElement('div');
+    row.className = 'labour-item-row';
+    row.innerHTML = `
+      <input type="text" value="${item.name.replace(/"/g, '&quot;')}" placeholder="Staff Name / Designation" oninput="updateLabourItem(${index}, 'name', this.value)">
+      <input type="number" value="${item.wage}" placeholder="Wage ₹" step="10" min="0" oninput="updateLabourItem(${index}, 'wage', this.value)">
+      <button class="btn-secondary" style="padding:4px 8px; color:var(--danger);" onclick="deleteLabourItem(${index})" title="Remove staff">🗑️</button>
+    `;
+    container.appendChild(row);
+  });
+
+  if ($('labourTotalBadge')) {
+    $('labourTotalBadge').textContent = `Total: ${money(totalSum)} / day`;
+  }
+}
+
+function updateLabourItem(index, key, val) {
+  if (currentLabourers[index]) {
+    if (key === 'wage') {
+      currentLabourers[index].wage = parseFloat(val) || 0;
+    } else {
+      currentLabourers[index].name = val;
+    }
+    const totalSum = currentLabourers.reduce((sum, l) => sum + (parseFloat(l.wage) || 0), 0);
+    if ($('labourTotalBadge')) {
+      $('labourTotalBadge').textContent = `Total: ${money(totalSum)} / day`;
+    }
+  }
+}
+
+function deleteLabourItem(index) {
+  currentLabourers.splice(index, 1);
+  renderLabourList();
+}
+
+function addNewLabourItem() {
+  currentLabourers.push({
+    id: 'lab-' + Date.now(),
+    name: 'New Joiner Staff ' + (currentLabourers.length + 1),
+    wage: 250
+  });
+  renderLabourList();
+  showToast('➕ New Labour Joiner Added');
 }
 
 function renderExpensesTable() {
-  const labour = loadLabour(currentDate);
   const expenses = loadExpenses(currentDate);
-
   const tbody = $('expensesTableBody');
   tbody.innerHTML = '';
 
-  let totalCost = 0;
-
-  // Add Labour Master Rows if present
-  if (labour.teaMaster > 0) {
-    totalCost += labour.teaMaster;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><strong>👨‍🍳 Labour Wage</strong></td>
-      <td>Tea Master Daily Wage</td>
-      <td style="font-family:var(--font-mono); color:var(--amber); font-weight:bold;">${money(labour.teaMaster)}</td>
-      <td><span style="font-size:0.75rem; color:var(--text-muted);">Daily Wage</span></td>
-    `;
-    tbody.appendChild(tr);
+  if (expenses.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px;">No expenses recorded for ${currentDate}.</td></tr>`;
+    return;
   }
 
-  if (labour.vadaMaster > 0) {
-    totalCost += labour.vadaMaster;
+  expenses.forEach((e, idx) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><strong>🧆 Labour Wage</strong></td>
-      <td>Vada Master Daily Wage</td>
-      <td style="font-family:var(--font-mono); color:var(--amber); font-weight:bold;">${money(labour.vadaMaster)}</td>
-      <td><span style="font-size:0.75rem; color:var(--text-muted);">Daily Wage</span></td>
-    `;
-    tbody.appendChild(tr);
-  }
-
-  expenses.forEach(exp => {
-    totalCost += exp.amount;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><strong>${exp.category}</strong></td>
-      <td>${exp.desc}</td>
-      <td style="font-family:var(--font-mono); color:var(--danger); font-weight:bold;">${money(exp.amount)}</td>
-      <td><button class="btn-danger-outline btn-sm" onclick="deleteExpense('${exp.id}')">🗑️ Delete</button></td>
+      <td><strong>${e.title}</strong></td>
+      <td><span class="badge-chip">${e.category}</span></td>
+      <td style="font-family:var(--font-mono);">${money(e.amount)}</td>
+      <td><button class="btn-secondary" style="padding:2px 6px; color:var(--danger);" onclick="deleteExpense(${idx})">🗑️</button></td>
     `;
     tbody.appendChild(tr);
   });
-
-  if (labour.teaMaster === 0 && labour.vadaMaster === 0 && expenses.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted);">No expenses or labour wages logged for ${currentDate}.</td></tr>`;
-  }
-
-  $('expTotalDisplay').textContent = money(totalCost);
 }
 
-function deleteExpense(id) {
-  let list = loadExpenses(currentDate);
-  list = list.filter(e => e.id !== id);
-  saveExpenses(currentDate, list);
+function deleteExpense(idx) {
+  const expenses = loadExpenses(currentDate);
+  expenses.splice(idx, 1);
+  saveExpenses(currentDate, expenses);
   renderExpensesTable();
   updateKPIs();
-  showToast('Expense deleted!');
 }
 
-// ---------- FINANCIAL SUMMARY DASHBOARDS (DAILY, MONTHLY, YEARLY) ----------
-function openReportsManager() {
-  renderPeriodPickerControls();
-  renderPeriodSummary();
-  openModal('reportsModal');
-}
+// ---------- FINANCIAL REPORTS & SUMMARIES ----------
+function renderFinancialReports() {
+  const period = selectedPeriodTab;
+  const keys = loadAllSalesKeys();
 
-function renderPeriodPickerControls() {
-  const container = $('periodPickerContainer');
-  container.innerHTML = '';
-
-  if (selectedPeriodTab === 'daily') {
-    container.innerHTML = `<span style="font-size:0.9rem; font-weight:600;">Selected Date: <strong>${currentDate}</strong></span>`;
-  } else if (selectedPeriodTab === 'monthly') {
-    container.innerHTML = `
-      <label style="font-size:0.85rem; font-weight:600; margin-right:6px;">Select Month:</label>
-      <input type="month" id="monthPickerInput" value="${selectedMonthStr}" style="padding:4px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-weight:bold;">
-    `;
-    setTimeout(() => {
-      const input = $('monthPickerInput');
-      if (input) {
-        input.onchange = (e) => {
-          selectedMonthStr = e.target.value;
-          renderPeriodSummary();
-        };
-      }
-    }, 50);
-  } else if (selectedPeriodTab === 'yearly') {
-    const currentYear = new Date().getFullYear();
-    const options = [currentYear - 1, currentYear, currentYear + 1].map(y => `<option value="${y}" ${selectedYearStr == y ? 'selected' : ''}>Year ${y}</option>`).join('');
-    container.innerHTML = `
-      <label style="font-size:0.85rem; font-weight:600; margin-right:6px;">Select Year:</label>
-      <select id="yearPickerSelect" style="padding:4px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-weight:bold;">${options}</select>
-    `;
-    setTimeout(() => {
-      const sel = $('yearPickerSelect');
-      if (sel) {
-        sel.onchange = (e) => {
-          selectedYearStr = e.target.value;
-          renderPeriodSummary();
-        };
-      }
-    }, 50);
-  }
-}
-
-function listAllSalesDates() {
-  const dates = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.startsWith('coffee_pos:sales:')) {
-      dates.push(key.replace('coffee_pos:sales:', ''));
-    }
-  }
-  return dates.sort();
-}
-
-function renderPeriodSummary() {
-  let grossRev = 0;
+  let grossSales = 0;
+  let totalDiscounts = 0;
+  let totalExpenses = 0;
   let totalLabour = 0;
-  let totalMiscExp = 0;
-  let totalPendingDebt = 0;
 
-  let chartLabels = [];
-  let chartSalesData = [];
-  let chartExpData = [];
+  const labels = [];
+  const salesData = [];
 
-  if (selectedPeriodTab === 'daily') {
-    $('reportChartTitle').textContent = `Daily Breakdown (${currentDate})`;
+  if (period === 'daily') {
     const sales = loadSales(currentDate);
-    const labour = loadLabour(currentDate);
-    const expenses = loadExpenses(currentDate);
-
-    grossRev = sales.reduce((sum, s) => sum + s.grandTotal, 0);
-    totalLabour = (labour.teaMaster || 0) + (labour.vadaMaster || 0);
-    totalMiscExp = expenses.reduce((sum, e) => sum + e.amount, 0);
-    totalPendingDebt = sales.filter(s => s.paymentStatus === 'Unpaid').reduce((sum, s) => sum + s.grandTotal, 0);
-
-    const hours = Array.from({ length: 14 }, (_, i) => i + 8);
-    chartLabels = hours.map(h => `${h > 12 ? h - 12 : h} ${h >= 12 ? 'PM' : 'AM'}`);
-    chartSalesData = hours.map(h => {
-      return sales.filter(s => new Date(s.timestamp || Date.now()).getHours() === h).reduce((sum, s) => sum + s.grandTotal, 0);
-    });
-    chartExpData = hours.map(() => 0);
-
-  } else if (selectedPeriodTab === 'monthly') {
-    $('reportChartTitle').textContent = `Monthly Breakdown (${selectedMonthStr})`;
-    const daysInMonth = new Date(selectedMonthStr.split('-')[0], selectedMonthStr.split('-')[1], 0).getDate();
-    const daysArray = Array.from({ length: daysInMonth }, (_, i) => {
-      const dNum = (i + 1) < 10 ? '0' + (i + 1) : (i + 1);
-      return `${selectedMonthStr}-${dNum}`;
+    sales.forEach(b => {
+      if (b.paymentStatus === 'Paid') {
+        grossSales += b.grandTotal;
+        totalDiscounts += b.discountAmount;
+      }
     });
 
-    chartLabels = daysArray.map(d => d.slice(8));
+    const exps = loadExpenses(currentDate);
+    totalExpenses = exps.reduce((sum, e) => sum + e.amount, 0);
 
-    daysArray.forEach(d => {
-      const dSales = loadSales(d);
-      const dLabour = loadLabour(d);
-      const dExpenses = loadExpenses(d);
+    totalLabour = getLabourTotal(currentDate);
 
-      const dayRev = dSales.reduce((sum, s) => sum + s.grandTotal, 0);
-      const dayLab = (dLabour.teaMaster || 0) + (dLabour.vadaMaster || 0);
-      const dayExp = dExpenses.reduce((sum, e) => sum + e.amount, 0);
-      const dayDebt = dSales.filter(s => s.paymentStatus === 'Unpaid').reduce((sum, s) => sum + s.grandTotal, 0);
+    labels.push(currentDate);
+    salesData.push(grossSales);
+  } else {
+    keys.forEach(date => {
+      const sales = loadSales(date);
+      const daySales = sales.reduce((sum, b) => sum + (b.paymentStatus === 'Paid' ? b.grandTotal : 0), 0);
+      const dayDiscounts = sales.reduce((sum, b) => sum + (b.paymentStatus === 'Paid' ? b.discountAmount : 0), 0);
 
-      grossRev += dayRev;
-      totalLabour += dayLab;
-      totalMiscExp += dayExp;
-      totalPendingDebt += dayDebt;
+      grossSales += daySales;
+      totalDiscounts += dayDiscounts;
 
-      chartSalesData.push(dayRev);
-      chartExpData.push(dayLab + dayExp);
-    });
+      const exps = loadExpenses(date);
+      totalExpenses += exps.reduce((sum, e) => sum + e.amount, 0);
 
-  } else if (selectedPeriodTab === 'yearly') {
-    $('reportChartTitle').textContent = `Yearly Month-by-Month Breakdown (${selectedYearStr})`;
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    chartLabels = monthNames;
+      totalLabour += getLabourTotal(date);
 
-    monthNames.forEach((m, idx) => {
-      const mStr = `${selectedYearStr}-${(idx + 1) < 10 ? '0' + (idx + 1) : (idx + 1)}`;
-      const monthDates = listAllSalesDates().filter(d => d.startsWith(mStr));
-
-      let mRev = 0;
-      let mLab = 0;
-      let mExp = 0;
-      let mDebt = 0;
-
-      monthDates.forEach(d => {
-        const dSales = loadSales(d);
-        const dLabour = loadLabour(d);
-        const dExpenses = loadExpenses(d);
-
-        mRev += dSales.reduce((sum, s) => sum + s.grandTotal, 0);
-        mLab += (dLabour.teaMaster || 0) + (dLabour.vadaMaster || 0);
-        mExp += dExpenses.reduce((sum, e) => sum + e.amount, 0);
-        mDebt += dSales.filter(s => s.paymentStatus === 'Unpaid').reduce((sum, s) => sum + s.grandTotal, 0);
-      });
-
-      grossRev += mRev;
-      totalLabour += mLab;
-      totalMiscExp += mExp;
-      totalPendingDebt += mDebt;
-
-      chartSalesData.push(mRev);
-      chartExpData.push(mLab + mExp);
+      labels.push(date);
+      salesData.push(daySales);
     });
   }
 
-  const netProfit = grossRev - (totalLabour + totalMiscExp);
+  const grandExpenses = totalExpenses + totalLabour;
+  const netProfit = grossSales - grandExpenses;
 
-  $('pRevenue').textContent = money(grossRev);
-  $('pLabour').textContent = money(totalLabour);
-  $('pExpenses').textContent = money(totalMiscExp);
-  $('pDebt').textContent = money(totalPendingDebt);
+  $('repGrossSales').textContent = money(grossSales);
+  $('repDiscounts').textContent = money(totalDiscounts);
+  $('repExpenses').textContent = money(grandExpenses);
+  $('repNetProfit').textContent = money(netProfit);
 
-  const profitEl = $('pNetProfit');
-  profitEl.textContent = money(netProfit);
-  profitEl.style.color = netProfit >= 0 ? 'var(--primary)' : 'var(--danger)';
-  $('pNetProfitShare').textContent = netProfit >= 0 ? 'Net Profit' : 'Net Loss';
-
-  renderSummaryChart(chartLabels, chartSalesData, chartExpData);
-}
-
-function renderSummaryChart(labels, salesData, expData) {
+  // Render Summary Chart
   const ctx = $('summaryReportChart').getContext('2d');
   if (summaryChartInstance) summaryChartInstance.destroy();
 
@@ -1335,20 +1121,12 @@ function renderSummaryChart(labels, salesData, expData) {
     type: 'bar',
     data: {
       labels: labels,
-      datasets: [
-        {
-          label: 'Revenue (₹)',
-          data: salesData,
-          backgroundColor: '#1F5C4F',
-          borderRadius: 4
-        },
-        {
-          label: 'Costs & Labour (₹)',
-          data: expData,
-          backgroundColor: '#DC2626',
-          borderRadius: 4
-        }
-      ]
+      datasets: [{
+        label: 'Revenue (₹)',
+        data: salesData,
+        backgroundColor: '#1F5C4F',
+        borderRadius: 6
+      }]
     },
     options: {
       responsive: true,
@@ -1357,356 +1135,297 @@ function renderSummaryChart(labels, salesData, expData) {
   });
 }
 
-// ---------- EXPORT & BACKUP ----------
-function exportCSV() {
+// ---------- VISUAL ANALYTICS ----------
+function renderAnalytics() {
+  const sales = loadSales(currentDate);
+
+  // Hourly Distribution
+  const hourlyMap = Array(24).fill(0);
+  const catMap = {};
+
+  sales.forEach(b => {
+    if (b.paymentStatus === 'Paid') {
+      const hour = parseInt(b.time.split(':')[0]) || 12;
+      hourlyMap[hour] += b.grandTotal;
+
+      b.items.forEach(i => {
+        catMap[i.name] = (catMap[i.name] || 0) + (i.price * i.qty);
+      });
+    }
+  });
+
+  // Hourly Chart
+  const ctx1 = $('hourlyChart').getContext('2d');
+  if (hourlyChartInstance) hourlyChartInstance.destroy();
+
+  hourlyChartInstance = new Chart(ctx1, {
+    type: 'line',
+    data: {
+      labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+      datasets: [{
+        label: 'Sales (₹)',
+        data: hourlyMap,
+        borderColor: '#1F5C4F',
+        backgroundColor: 'rgba(31, 92, 79, 0.15)',
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+
+  // Category Doughnut Chart
+  const ctx2 = $('categoryChart').getContext('2d');
+  if (categoryChartInstance) categoryChartInstance.destroy();
+
+  categoryChartInstance = new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(catMap),
+      datasets: [{
+        data: Object.values(catMap),
+        backgroundColor: ['#1F5C4F', '#C86D51', '#E29578', '#2A9D8F', '#E65100', '#F57F17', '#9D4EDD']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+}
+
+// ---------- DEMO DATA GENERATOR ----------
+function loadDemoData() {
+  if (confirm('Load sample sales, menu, and expenses into today\'s session?')) {
+    const today = currentDate;
+    const demoSales = [
+      { billNo: 101, tokenNo: 1, date: today, time: '08:30', orderType: 'Dine In', customerName: 'Prof. Sharma', customerDept: 'Physics', customerPhone: '9876543210', items: [{ id: 'cat-1', name: 'Tea', price: 15, qty: 2 }, { id: 'cat-7', name: 'Vada', price: 10, qty: 2 }], subtotal: 50, discountPercent: 0, discountAmount: 0, grandTotal: 50, paymentMethod: 'UPI', paymentStatus: 'Paid' },
+      { billNo: 102, tokenNo: 2, date: today, time: '09:15', orderType: 'Takeaway', customerName: 'Anand Kumar', customerDept: 'CS Dept', customerPhone: '9443322110', items: [{ id: 'cat-2', name: 'Coffee', price: 15, qty: 4 }, { id: 'cat-8', name: 'Cauliflower', price: 40, qty: 1 }], subtotal: 100, discountPercent: 10, discountAmount: 10, grandTotal: 90, paymentMethod: 'Cash', paymentStatus: 'Paid' },
+      { billNo: 103, tokenNo: 3, date: today, time: '11:00', orderType: 'Dine In', customerName: 'Student Guild', customerDept: 'Admin', customerPhone: '9112233445', items: [{ id: 'cat-5', name: 'Boost', price: 20, qty: 3 }, { id: 'cat-10', name: 'Biscuits ₹10', price: 10, qty: 3 }], subtotal: 90, discountPercent: 0, discountAmount: 0, grandTotal: 90, paymentMethod: 'Credit', paymentStatus: 'Pending' }
+    ];
+
+    const demoExpenses = [
+      { title: 'Fresh Cow Milk 10L', category: 'Raw Materials', amount: 500 },
+      { title: 'Tea Powder & Sugar', category: 'Raw Materials', amount: 250 },
+      { title: 'Paper Cups Pack', category: 'Misc', amount: 120 }
+    ];
+
+    saveSales(today, demoSales);
+    saveExpenses(today, demoExpenses);
+    saveLabour(today, { teaMaster: 400, vadaMaster: 300 });
+
+    updateKPIs();
+    showToast('✨ Sample Demo Data Loaded!');
+  }
+}
+
+// ---------- EXPORT CSV & BACKUP / RESTORE ----------
+function exportSalesCsv() {
   const sales = loadSales(currentDate);
   if (sales.length === 0) {
-    showToast('⚠️ No sales records for selected date.');
+    showToast('⚠️ No sales data to export for today');
     return;
   }
 
-  let csv = 'Bill No,Token No,Buying Date & Time,Customer Name,Department,Phone Number,Order Type,Payment Method,Payment Status,Item Name,Price,Qty,Total,Grand Total\n';
-  sales.forEach(s => {
-    const dateTime = s.buyingDateTime || `${s.date} ${s.time}`;
-    s.items.forEach(i => {
-      csv += `${s.billNo},${s.tokenNo},"${dateTime}","${s.customerName || ''}","${s.customerDept || ''}","${s.customerPhone || ''}","${s.orderType}","${s.paymentMethod}","${s.paymentStatus || 'Paid'}","${i.name}",${i.price},${i.qty},${i.price * i.qty},${s.grandTotal}\n`;
-    });
+  let csv = 'BillNo,TokenNo,Date,Time,Customer,Dept,Phone,OrderType,Items,GrandTotal,PaymentMethod,Status\n';
+  sales.forEach(b => {
+    const itemStr = b.items.map(i => `${i.name} (x${i.qty})`).join('; ');
+    csv += `"${b.billNo}","${b.tokenNo}","${b.date}","${b.time}","${b.customerName}","${b.customerDept}","${b.customerPhone}","${b.orderType}","${itemStr}","${b.grandTotal}","${b.paymentMethod}","${b.paymentStatus}"\n`;
   });
 
   const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
+  const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
   a.download = `CoffeeSpot_Sales_${currentDate}.csv`;
   a.click();
-  showToast('📥 CSV Exported!');
+  showToast('📥 CSV Exported');
 }
 
-function loadDemoSales() {
-  const demoItems = [
-    { name: 'Tea', price: 15 },
-    { name: 'Coffee', price: 15 },
-    { name: 'Black Coffee', price: 15 },
-    { name: 'Boost', price: 20 },
-    { name: 'Vada', price: 10 },
-    { name: 'Cauliflower', price: 40 },
-    { name: 'Juice ₹20', price: 20 }
-  ];
-
-  const sales = [];
-  const now = new Date();
-
-  for (let i = 1; i <= 12; i++) {
-    const randomItem = demoItems[Math.floor(Math.random() * demoItems.length)];
-    const qty = Math.floor(Math.random() * 3) + 1;
-    const grandTotal = randomItem.price * qty;
-
-    sales.push({
-      billNo: globalBillNo++,
-      tokenNo: globalTokenNo++,
-      date: currentDate,
-      time: `${8 + i}:30 AM`,
-      buyingDateTime: `${currentDate} ${8 + i}:30 AM`,
-      timestamp: now.getTime() - (i * 3600000),
-      customerName: `Customer #${i}`,
-      customerDept: i % 2 === 0 ? 'Computer Science' : 'Administration',
-      customerPhone: `98765432${i < 10 ? '0' + i : i}`,
-      orderType: Math.random() > 0.3 ? 'Dine In' : 'Takeaway',
-      paymentMethod: Math.random() > 0.4 ? 'Cash' : 'UPI',
-      paymentStatus: i % 3 === 0 ? 'Unpaid' : 'Paid',
-      items: [{ name: randomItem.name, price: randomItem.price, qty: qty }],
-      subtotal: grandTotal,
-      discountPercent: 0,
-      discountAmount: 0,
-      grandTotal: grandTotal,
-      cashGiven: grandTotal
-    });
+function downloadBackup() {
+  const backup = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('coffee_pos:')) {
+      backup[k] = localStorage.getItem(k);
+    }
   }
 
-  localStorage.setItem('coffee_pos:bill_no', globalBillNo);
-  localStorage.setItem('coffee_pos:token_no', globalTokenNo);
-  saveSales(currentDate, sales);
-  updateKPIs();
-  showToast('✨ Demo Sales Loaded!');
+  const jsonStr = JSON.stringify(backup, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `CoffeeSpot_Backup_${getTodayString()}.json`;
+  a.click();
+  showToast('💾 Backup Downloaded');
+}
+
+function restoreBackup(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const backup = JSON.parse(e.target.result);
+      Object.keys(backup).forEach(k => {
+        localStorage.setItem(k, backup[k]);
+      });
+      alert('Backup restored successfully! Reloading...');
+      window.location.reload();
+    } catch (err) {
+      alert('Invalid backup JSON file.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ---------- KEYBOARD HOTKEYS ----------
+function initHotkeys() {
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+    // Hotkeys 1-9, 0
+    if (/^[0-9]$/.test(e.key)) {
+      const item = catalog.find(i => i.hotkey === e.key);
+      if (item) {
+        e.preventDefault();
+        addToCart(item);
+      }
+    } else if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+    }
+  });
 }
 
 // ---------- EVENT BINDINGS ----------
 function bindEvents() {
-  // Search filter
-  $('itemSearch').addEventListener('input', renderCatalogGrid);
-
-  // Direct 1-Tap Toggle
-  const saved1Tap = localStorage.getItem('coffee_pos:direct_1tap_mode') === 'true';
-  if ($('direct1TapToggle')) {
-    $('direct1TapToggle').checked = saved1Tap;
-    $('direct1TapToggle').onchange = (e) => {
-      localStorage.setItem('coffee_pos:direct_1tap_mode', e.target.checked);
-      if (e.target.checked) {
-        showToast('⚡ Direct 1-Tap Print Mode Enabled!');
-      } else {
-        showToast('🛒 Standard Cart Mode Enabled');
-      }
-    };
-  }
-
-  // Payment Method selection
-  document.querySelectorAll('.btn-pm').forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll('.btn-pm').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      paymentMethod = btn.dataset.mode;
-    };
-  });
-
-  // Payment Status selection (Paid vs Unpaid)
-  document.querySelectorAll('.btn-ps').forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll('.btn-ps').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      paymentStatus = btn.dataset.status;
-    };
-  });
-
-  // Recent Bills Filter Tabs
-  document.querySelectorAll('.bills-filter-tabs button').forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll('.bills-filter-tabs button').forEach(b => b.style.fontWeight = 'normal');
-      btn.style.fontWeight = 'bold';
-      billsFilterStatus = btn.dataset.filter;
-      renderRecentBillsTable();
-    };
-  });
-
-  // Tender quick buttons
-  document.querySelectorAll('.btn-tender-tag').forEach(btn => {
-    btn.onclick = () => {
-      const val = btn.dataset.val;
-      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      const discountPercent = parseFloat($('cartDiscount').value) || 0;
-      const grandTotal = Math.max(0, subtotal - (subtotal * discountPercent) / 100);
-
-      if (val === 'exact') {
-        $('cashGiven').value = grandTotal;
-      } else {
-        $('cashGiven').value = val;
-      }
-      updateCartTotals();
-    };
-  });
-
-  $('cashGiven').addEventListener('input', updateCartTotals);
-  $('cartDiscount').addEventListener('input', updateCartTotals);
-
-  // Clear & Checkout
-  $('clearCartBtn').onclick = () => {
-    cart = [];
-    renderCart();
-    showToast('Cart cleared!');
-  };
-
-  $('checkoutBtn').onclick = checkoutCart;
-
-  // Modals Open/Close
   $('editShopBtn').onclick = () => openModal('storeModal');
-  $('shopNameDisplay').onclick = () => openModal('storeModal');
-
   $('saveStoreBtn').onclick = () => {
     storeInfo.name = $('storeNameInput').value.trim() || 'Coffee Spot';
-    storeInfo.tagline = $('storeTagInput').value.trim() || 'Gandhigram';
-    storeInfo.upi = $('storeUpiInput').value.trim() || '';
-    if ($('storeFooterInput')) storeInfo.footer = $('storeFooterInput').value.trim();
-    if ($('audioToggleInput')) storeInfo.audioEnabled = $('audioToggleInput').checked;
+    storeInfo.tagline = $('storeTagInput').value.trim();
+    storeInfo.upi = $('storeUpiInput').value.trim();
+    storeInfo.footer = $('storeFooterInput').value.trim();
+    storeInfo.audioEnabled = $('audioToggleInput').checked;
     saveStoreInfo();
     initStoreBranding();
     closeModal('storeModal');
-    showToast('Store info saved!');
+    showToast('Settings Saved');
   };
 
-  $('openCatalogBtn').onclick = openCatalogManager;
-  $('openRecentBillsBtn').onclick = openRecentBills;
-  if ($('openCustomerLedgerBtn')) $('openCustomerLedgerBtn').onclick = openCustomerLedger;
-  if ($('ledgerSearchInput')) $('ledgerSearchInput').addEventListener('input', renderCustomerLedgerTable);
-  $('openExpensesBtn').onclick = openExpensesManager;
-  $('openReportsBtn').onclick = openReportsManager;
-  $('openAnalyticsBtn').onclick = openAnalytics;
-  $('exportCsvBtn').onclick = exportCSV;
-  $('loadSampleBtn').onclick = loadDemoSales;
-  $('backupDataBtn').onclick = () => openModal('backupModal');
-
-  // Labour form submit
-  $('labourForm').onsubmit = (e) => {
-    e.preventDefault();
-    const teaWage = parseFloat($('teaMasterWage').value) || 0;
-    const vadaWage = parseFloat($('vadaMasterWage').value) || 0;
-    saveLabour(currentDate, { teaMaster: teaWage, vadaMaster: vadaWage });
-    renderExpensesTable();
-    updateKPIs();
-    showToast('👨‍🍳 Daily Labour Wages Saved!');
-  };
-
-  // Expense form submit
-  $('expenseForm').onsubmit = (e) => {
-    e.preventDefault();
-    const category = $('expCategory').value;
-    const desc = $('expDesc').value.trim();
-    const amount = parseFloat($('expAmount').value) || 0;
-
-    const list = loadExpenses(currentDate);
-    list.push({
-      id: 'exp-' + Date.now(),
-      category: category,
-      desc: desc,
-      amount: amount,
-      timestamp: Date.now()
-    });
-
-    saveExpenses(currentDate, list);
-    renderExpensesTable();
-    updateKPIs();
-    $('expDesc').value = '';
-    $('expAmount').value = '';
-    showToast('➕ Miscellaneous Expense Added!');
-  };
-
-  // Period Tabs (Daily, Monthly, Yearly)
-  document.querySelectorAll('.period-tabs button').forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll('.period-tabs button').forEach(b => b.classList.remove('active-period-tab'));
-      btn.classList.add('active-period-tab');
-      selectedPeriodTab = btn.dataset.period;
-      renderPeriodPickerControls();
-      renderPeriodSummary();
-    };
-  });
-
-  $('triggerPrintBtn').onclick = () => window.print();
-
-  // Modal close triggers
-  document.querySelectorAll('[data-close]').forEach(btn => {
-    btn.onclick = () => closeModal(btn.dataset.close);
-  });
-
-  // Catalog Form Submit
-  $('catalogItemForm').onsubmit = (e) => {
-    e.preventDefault();
-    const id = $('editItemId').value || 'cat-' + Date.now();
-    const item = {
-      id: id,
-      cat: $('itemCatInput').value.trim(),
-      name: $('itemNameInput').value.trim(),
-      price: parseFloat($('itemPriceInput').value) || 0,
-      icon: $('itemIconInput').value.trim() || '☕',
-      hotkey: $('itemHotkeyInput').value.trim(),
-      stock: $('itemStockSelect').value
-    };
-
-    const idx = catalog.findIndex(i => i.id === id);
-    if (idx !== -1) {
-      catalog[idx] = item;
-    } else {
-      catalog.push(item);
-    }
-
-    saveCatalog();
-    initCategoryTabs();
-    renderCatalogGrid();
+  $('openCatalogBtn').onclick = () => {
     renderCatalogTable();
-
-    // Reset Form
-    $('catalogItemForm').reset();
-    $('editItemId').value = '';
-    $('catalogFormTitle').textContent = 'Add New Item';
-    $('saveCatalogItemBtn').textContent = '➕ Save Item';
-    showToast('Catalog updated!');
+    openModal('catalogModal');
   };
-
-  $('resetCatalogFormBtn').onclick = () => {
-    $('catalogItemForm').reset();
-    $('editItemId').value = '';
-    $('catalogFormTitle').textContent = 'Add New Item';
-    $('saveCatalogItemBtn').textContent = '➕ Save Item';
-  };
-
-  $('resetDefaultCatalogBtn').onclick = () => {
-    if (confirm('Reset catalog to default menu?')) {
+  $('saveItemBtn').onclick = saveCatalogItem;
+  $('resetCatalogBtn').onclick = () => {
+    if (confirm('Reset menu to default items?')) {
       catalog = JSON.parse(JSON.stringify(DEFAULT_CATALOG));
       saveCatalog();
       initCategoryTabs();
       renderCatalogGrid();
       renderCatalogTable();
-      showToast('Catalog reset to defaults!');
+      showToast('Menu Reset to Default');
     }
   };
 
-  // Keyboard Shortcuts (Hotkeys 1-9, 0 & Space for checkout)
-  document.addEventListener('keydown', (e) => {
-    // Disable if user is typing inside an input field
-    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+  $('openRecentBillsBtn').onclick = () => {
+    renderRecentBillsTable();
+    openModal('recentBillsModal');
+  };
+
+  $('billsFilterButtons').onclick = (e) => {
+    if (e.target.classList.contains('btn-chip')) {
+      document.querySelectorAll('#billsFilterButtons .btn-chip').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      billsFilterStatus = e.target.getAttribute('data-filter');
+      renderRecentBillsTable();
+    }
+  };
+
+  $('billSearchInput').oninput = renderRecentBillsTable;
+
+  $('openCustomerLedgerBtn').onclick = () => {
+    renderCustomerLedger();
+    openModal('ledgerModal');
+  };
+  $('ledgerSearchInput').oninput = renderCustomerLedger;
+
+  $('openExpensesBtn').onclick = () => {
+    initExpensesView();
+    openModal('expensesModal');
+  };
+
+  $('addNewLabourBtn').onclick = addNewLabourItem;
+  $('saveLabourBtn').onclick = () => {
+    saveLabour(currentDate, currentLabourers);
+    updateKPIs();
+    showToast('💾 Staff Roster & Daily Wages Saved');
+  };
+
+  $('addExpenseBtn').onclick = () => {
+    const title = $('expenseTitleInput').value.trim();
+    const amount = parseFloat($('expenseAmountInput').value) || 0;
+    const cat = $('expenseCatInput').value;
+
+    if (!title || amount <= 0) {
+      alert('Please specify a title and amount.');
       return;
     }
 
-    if (e.code === 'Space') {
-      e.preventDefault();
-      checkoutCart();
-      return;
-    }
+    const exps = loadExpenses(currentDate);
+    exps.push({ title: title, amount: amount, category: cat });
+    saveExpenses(currentDate, exps);
 
-    const key = e.key;
-    const matchItem = catalog.find(i => i.hotkey === key);
-    if (matchItem) {
-      e.preventDefault();
-      addToCart(matchItem);
-    }
+    $('expenseTitleInput').value = '';
+    $('expenseAmountInput').value = '';
+    renderExpensesTable();
+    updateKPIs();
+    showToast('Expense Recorded');
+  };
+
+  $('openReportsBtn').onclick = () => {
+    renderFinancialReports();
+    openModal('reportsModal');
+  };
+
+  document.querySelectorAll('.report-tab').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.report-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedPeriodTab = btn.getAttribute('data-period');
+      renderFinancialReports();
+    };
   });
 
-  // Recent Bills Search
-  $('billSearchInput').addEventListener('input', renderRecentBillsTable);
-
-  // Backup & Restore
-  $('downloadBackupBtn').onclick = () => {
-    const backupData = {
-      storeInfo: storeInfo,
-      catalog: catalog,
-      sales: localStorage
-    };
-    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `CoffeeSpot_Backup_${getTodayString()}.json`;
-    a.click();
-    showToast('💾 Backup downloaded!');
+  $('openAnalyticsBtn').onclick = () => {
+    renderAnalytics();
+    openModal('analyticsModal');
   };
-}
 
-// ---------- MODAL CONTROL ----------
-function openModal(id) {
-  $(id).classList.add('active');
-}
+  $('backupDataBtn').onclick = () => openModal('backupModal');
+  $('downloadBackupBtn').onclick = downloadBackup;
+  $('triggerRestoreBtn').onclick = () => $('restoreFileInput').click();
+  $('restoreFileInput').onchange = (e) => {
+    if (e.target.files.length > 0) restoreBackup(e.target.files[0]);
+  };
 
-function closeModal(id) {
-  $(id).classList.remove('active');
-}
+  $('exportCsvBtn').onclick = exportSalesCsv;
+  $('loadSampleBtn').onclick = loadDemoData;
 
-// ---------- TOAST SYSTEM ----------
-function showToast(msg) {
-  const container = $('toastContainer');
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = msg;
-  container.appendChild(toast);
-  setTimeout(() => toast.remove(), 2500);
-}
+  $('clearCartBtn').onclick = clearCart;
+  $('checkoutPrintBtn').onclick = () => checkoutCart(true);
+  $('checkoutSaveBtn').onclick = () => checkoutCart(false);
 
-function triggerHaptic() {
-  if ('vibrate' in navigator) {
-    try { navigator.vibrate(30); } catch (e) {}
+  $('cartDiscount').oninput = updateCartTotals;
+  $('cashGiven').oninput = updateCartTotals;
+
+  $('itemSearch').oninput = renderCatalogGrid;
+
+  // Mobile navigation
+  if ($('mCheckoutBtn')) {
+    $('mCheckoutBtn').onclick = () => checkoutCart(true);
   }
 }
 
 // ---------- PWA SETUP ----------
 function initPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(e => console.log(e));
+    navigator.serviceWorker.register('sw.js').catch(() => {});
   }
 }
