@@ -1232,8 +1232,17 @@ body {
   }
 }
 
-/* --- PRINT STYLES FOR THERMAL PRINTERS --- */
+/* --- PRINT STYLES FOR 58mm THERMAL PRINTERS (e.g. KORES Endura PRP21) --- */
 @media print {
+  @page {
+    size: 58mm auto;
+    margin: 0;
+  }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 58mm !important;
+  }
   body * {
     visibility: hidden;
   }
@@ -1245,15 +1254,19 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 58mm !important;
+    max-width: 58mm !important;
     background: #FFF !important;
     padding: 0 !important;
+    margin: 0 !important;
   }
   .modal-box {
     box-shadow: none !important;
     border: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 58mm !important;
+    max-width: 58mm !important;
+    padding: 4px !important;
+    margin: 0 !important;
   }
   .no-print {
     display: none !important;
