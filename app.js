@@ -751,10 +751,10 @@ function updateKPIs() {
   const totalCost = totalExpenses + totalLabour;
   const netProfit = totalSales - totalCost;
 
-  $('kpiTotalSales').textContent = money(totalSales);
-  $('kpiBillsCount').textContent = billsCount;
-  $('kpiExpenses').textContent = money(totalCost);
-  $('kpiNetProfit').textContent = money(netProfit);
+  if ($('kpiTotalSales')) $('kpiTotalSales').textContent = money(totalSales);
+  if ($('kpiBillsCount')) $('kpiBillsCount').textContent = billsCount;
+  if ($('kpiExpenses')) $('kpiExpenses').textContent = money(totalCost);
+  if ($('kpiNetProfit')) $('kpiNetProfit').textContent = money(netProfit);
 }
 
 // ---------- CATALOG MANAGEMENT MODAL ----------
