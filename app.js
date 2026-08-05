@@ -630,18 +630,18 @@ function checkoutCart(shouldPrint = true) {
   const discountAmount = (subtotal * discountPercent) / 100;
   const grandTotal = Math.max(0, subtotal - discountAmount);
 
-  const paymentMethod = $('paymentMethodSelect').value;
-  const paymentStatus = (paymentMethod === 'Credit') ? 'Pending' : $('paymentStatusSelect').value;
+  const paymentMethod = $('paymentMethodSelect') ? $('paymentMethodSelect').value : 'Cash';
+  const paymentStatus = (paymentMethod === 'Credit') ? 'Pending' : ($('paymentStatusSelect') ? $('paymentStatusSelect').value : 'Paid');
 
   const billRecord = {
     billNo: globalBillNo,
     tokenNo: globalTokenNo,
     date: currentDate,
     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    orderType: $('orderType').value,
-    customerName: $('customerName').value.trim() || 'Walk-in Customer',
-    customerDept: $('customerDept').value.trim(),
-    customerPhone: $('customerPhone').value.trim(),
+    orderType: $('orderType') ? $('orderType').value : 'Dine In',
+    customerName: $('customerName') ? ($('customerName').value.trim() || 'Walk-in Customer') : 'Walk-in Customer',
+    customerDept: $('customerDept') ? $('customerDept').value.trim() : '',
+    customerPhone: $('customerPhone') ? $('customerPhone').value.trim() : '',
     items: JSON.parse(JSON.stringify(cart)),
     subtotal: subtotal,
     discountPercent: discountPercent,
@@ -665,76 +665,91 @@ function checkoutCart(shouldPrint = true) {
   playChime('complete');
   showToast(`✅ Bill #${billRecord.billNo} Saved!`);
 
-  // Render Receipt Modal
-  renderReceiptModal(billRecord);
+  // Render Receipt Modal Popup
+  if (shouldPrint) {
+    showReceiptModal(billRecord);
+  }
 
   // Reset Cart
   clearCart();
   updateKPIs();
-
-  if (shouldPrint) {
-    openModal('receiptModal');
-  }
 }
 
-function renderReceiptModal(bill) {
-  $('recStoreName').textContent = storeInfo.name;
-  $('recStoreTag').textContent = storeInfo.tagline;
-  $('recBillNo').textContent = bill.billNo;
-  $('recTokenNo').textContent = bill.tokenNo;
-  $('recDateTime').textContent = `${bill.date} ${bill.time}`;
-  $('recOrderType').textContent = bill.orderType;
-  $('recFooterText').textContent = storeInfo.footer || 'Thank you for visiting!';
-
-  if (bill.customerName && bill.customerName !== 'Walk-in Customer') {
-    $('recCustomerRow').style.display = 'block';
-    $('recCustomerName').textContent = bill.customerName + (bill.customerDept ? ` (${bill.customerDept})` : '');
-  } else {
-    $('recCustomerRow').style.display = 'none';
-  }
-
-  const tbody = $('recItemsList');
-  tbody.innerHTML = '';
-  bill.items.forEach(item => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="text-align:left;">${item.name}</td>
-      <td style="text-align:center;">${item.qty}</td>
-      <td style="text-align:right;">${money(item.price)}</td>
-      <td style="text-align:right;">${money(item.price * item.qty)}</td>
+function showReceiptModal(bill) {
+  let modalOverlay = document.getElementById('dynamicReceiptModal');
+  if (!modalOverlay) {
+    modalOverlay = document.createElement('div');
+    modalOverlay.id = 'dynamicReceiptModal';
+    modalOverlay.style.cssText = `
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center; z-index: 99999; padding: 20px;
     `;
-    tbody.appendChild(tr);
-  });
-
-  $('recSubtotal').textContent = money(bill.subtotal);
-  if (bill.discountAmount > 0) {
-    $('recDiscountRow').style.display = 'flex';
-    $('recDiscount').textContent = money(bill.discountAmount);
-  } else {
-    $('recDiscountRow').style.display = 'none';
+    document.body.appendChild(modalOverlay);
   }
-  $('recGrandTotal').textContent = money(bill.grandTotal);
-  $('recPayMethod').textContent = `${bill.paymentMethod} (${bill.paymentStatus})`;
 
-  // Render UPI QR Code if UPI ID configured
-  const qrWrap = $('receiptQrWrap');
-  const qrCanvas = $('receiptQrCanvas');
-  qrCanvas.innerHTML = '';
+  const itemsHtml = bill.items.map(item => `
+    <tr style="border-bottom: 1px dashed #ccc;">
+      <td style="padding: 6px 0; text-align: left;">${item.name}</td>
+      <td style="padding: 6px 0; text-align: center;">${item.qty}</td>
+      <td style="padding: 6px 0; text-align: right;">₹${item.price}</td>
+      <td style="padding: 6px 0; text-align: right; font-weight: bold;">₹${item.price * item.qty}</td>
+    </tr>
+  `).join('');
 
-  if (storeInfo.upi) {
-    qrWrap.style.display = 'flex';
-    try {
-      const upiUrl = `upi://pay?pa=${encodeURIComponent(storeInfo.upi)}&pn=${encodeURIComponent(storeInfo.name)}&am=${bill.grandTotal}&cu=INR`;
-      const qr = qrcode(0, 'M');
-      qr.addData(upiUrl);
-      qr.make();
-      qrCanvas.innerHTML = qr.createImgTag(4);
-    } catch (e) {
-      qrWrap.style.display = 'none';
-    }
-  } else {
-    qrWrap.style.display = 'none';
-  }
+  modalOverlay.innerHTML = `
+    <div style="background: #ffffff; color: #000000; border-radius: 16px; padding: 24px; max-width: 400px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.5); font-family: 'Space Mono', monospace, sans-serif;">
+      <div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 12px; margin-bottom: 12px;">
+        <h2 style="margin: 0; font-size: 1.4rem;">${storeInfo.name || 'Coffee Spot'}</h2>
+        <p style="margin: 2px 0 6px 0; font-size: 0.75rem; opacity: 0.8;">${storeInfo.tagline || ''}</p>
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: bold; margin-top: 8px;">
+          <span>Bill #${bill.billNo}</span>
+          <span>Token #${bill.tokenNo}</span>
+        </div>
+        <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 2px;">${bill.date} ${bill.time} (${bill.orderType})</div>
+      </div>
+
+      ${bill.customerName && bill.customerName !== 'Walk-in Customer' ? `<div style="font-size:0.8rem; margin-bottom:8px;"><strong>Customer:</strong> ${bill.customerName}</div>` : ''}
+
+      <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-bottom: 12px;">
+        <thead>
+          <tr style="border-bottom: 1px solid #000; text-align: left;">
+            <th>Item</th>
+            <th style="text-align:center;">Qty</th>
+            <th style="text-align:right;">Price</th>
+            <th style="text-align:right;">Total</th>
+          </tr>
+        </thead>
+        <tbody>${itemsHtml}</tbody>
+      </table>
+
+      <div style="border-top: 2px dashed #000; padding-top: 8px; font-size: 0.9rem;">
+        <div style="display: flex; justify-content: space-between;">
+          <span>Subtotal:</span>
+          <span>₹${bill.subtotal}</span>
+        </div>
+        ${bill.discountAmount > 0 ? `
+          <div style="display: flex; justify-content: space-between; color: green;">
+            <span>Discount (${bill.discountPercent}%):</span>
+            <span>-₹${bill.discountAmount}</span>
+          </div>
+        ` : ''}
+        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 800; margin-top: 6px;">
+          <span>Grand Total:</span>
+          <span>₹${bill.grandTotal}</span>
+        </div>
+        <div style="font-size: 0.8rem; margin-top: 4px; opacity: 0.8;">
+          Paid via: <strong>${bill.paymentMethod} (${bill.paymentStatus})</strong>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; display: flex; gap: 10px;">
+        <button onclick="window.print()" style="flex: 1; background: #1F5C4F; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">🖨️ Print Receipt</button>
+        <button onclick="document.getElementById('dynamicReceiptModal').style.display='none'" style="flex: 1; background: #334155; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">✅ Next Order</button>
+      </div>
+    </div>
+  `;
+
+  modalOverlay.style.display = 'flex';
 }
 
 // ---------- KPI METRICS UPDATER ----------
