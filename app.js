@@ -81,14 +81,22 @@ const DEFAULT_CATALOG = [
   { id: 'cat-22', cat: 'Chocolates & Eats', name: 'Kinder Joy', price: 100, icon: '🎁', img: 'assets/chocolate.png', hotkey: '', stock: 'instock', variants: [100] },
   { id: 'cat-18', cat: 'Snacks & Eats', name: 'Chocolate', price: 40, icon: '🍫', img: 'assets/chocolate.png', hotkey: '', stock: 'instock', variants: [20, 40, 100] },
   { id: 'cat-19', cat: 'Bakery & Eats', name: 'Bread Packet', price: 50, icon: '🍞', img: 'assets/bread.png', hotkey: '', stock: 'instock' },
-  { id: 'cat-9', cat: 'Biscuits', name: 'Biscuits', price: 10, icon: '🍪', hotkey: '8', stock: 'instock', variants: [5, 10, 20, 30] }
+  { id: 'cat-9', cat: 'Biscuits', name: 'Biscuits', price: 10, icon: '🍪', hotkey: '8', stock: 'instock', variants: [5, 10, 20, 30] },
+  // Lay's & Chips Category (Market Price ₹5, ₹10, ₹20)
+  { id: 'lays-1', cat: "Lay's & Chips", name: "Lay's Magic Masala", price: 10, icon: '🥔', hotkey: '', stock: 'instock', variants: [5, 10, 20] },
+  { id: 'lays-2', cat: "Lay's & Chips", name: "Lay's Cream & Onion", price: 10, icon: '🥔', hotkey: '', stock: 'instock', variants: [5, 10, 20] },
+  { id: 'lays-3', cat: "Lay's & Chips", name: "Lay's Classic Salted", price: 10, icon: '🥔', hotkey: '', stock: 'instock', variants: [5, 10, 20] },
+  { id: 'lays-4', cat: "Lay's & Chips", name: "Lay's Spanish Tomato", price: 10, icon: '🍅', hotkey: '', stock: 'instock', variants: [5, 10, 20] },
+  { id: 'lays-5', cat: "Lay's & Chips", name: "Lay's Chile Limon", price: 10, icon: '🍋', hotkey: '', stock: 'instock', variants: [5, 10, 20] },
+  { id: 'lays-6', cat: "Lay's & Chips", name: "Lay's Maxx / Sizzling Hot", price: 20, icon: '🌶️', hotkey: '', stock: 'instock', variants: [10, 20] },
+  { id: 'lays-7', cat: "Lay's & Chips", name: "Lay's Wafer Chips (Rs 5)", price: 5, icon: '🥔', hotkey: '', stock: 'instock', variants: [5, 10, 20] }
 ];
 
 // Default Labour Staff Roster (5 Shop Labours)
 const DEFAULT_LABOURERS = [
-  { id: 'lab-1', name: 'Tea Master (Ramesh)', wage: 400 },
-  { id: 'lab-2', name: 'Vada Master (Suresh)', wage: 350 },
-  { id: 'lab-3', name: 'Counter / Cashier (Priya)', wage: 300 },
+  { id: 'lab-1', name: 'Tea Master (Ashok)', wage: 400 },
+  { id: 'lab-2', name: 'Vada Master (Noor bhai)', wage: 350 },
+  { id: 'lab-3', name: 'Counter / Cashier (Bala murugan)', wage: 300 },
   { id: 'lab-4', name: 'Cleaning & Maintenance (Murugan)', wage: 250 },
   { id: 'lab-5', name: 'Helper / Delivery (Karthik)', wage: 250 }
 ];
@@ -130,17 +138,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ---------- STORAGE HELPERS ----------
 function loadCatalog() {
+  let defaultItems = JSON.parse(JSON.stringify(DEFAULT_CATALOG));
   try {
-    let loaded = JSON.parse(JSON.stringify(DEFAULT_CATALOG));
-    localStorage.setItem('coffee_pos:catalog_v3', JSON.stringify(loaded));
-    return loaded;
-  } catch (e) {
-    return JSON.parse(JSON.stringify(DEFAULT_CATALOG));
-  }
+    const raw = localStorage.getItem('coffee_pos:catalog_v6');
+    if (raw) {
+      let saved = JSON.parse(raw);
+      defaultItems.forEach(dItem => {
+        if (!saved.some(s => s.id === dItem.id)) {
+          saved.push(dItem);
+        }
+      });
+      localStorage.setItem('coffee_pos:catalog_v6', JSON.stringify(saved));
+      return saved;
+    }
+  } catch (e) {}
+  localStorage.setItem('coffee_pos:catalog_v6', JSON.stringify(defaultItems));
+  return defaultItems;
 }
 
 function saveCatalog() {
-  localStorage.setItem('coffee_pos:catalog_v1', JSON.stringify(catalog));
+  localStorage.setItem('coffee_pos:catalog_v6', JSON.stringify(catalog));
 }
 
 function loadStoreInfo() {
@@ -197,13 +214,20 @@ function loadLabour(date) {
   try {
     const raw = localStorage.getItem('coffee_pos:labour:' + date);
     if (!raw) return JSON.parse(JSON.stringify(DEFAULT_LABOURERS));
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) return parsed;
-    // Migrate old format { teaMaster, vadaMaster }
+    let parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      // Auto-update staff names if matching old defaults
+      parsed.forEach(lab => {
+        if (lab.id === 'lab-1' || lab.name.includes('Ramesh')) lab.name = 'Tea Master (Ashok)';
+        if (lab.id === 'lab-2' || lab.name.includes('Suresh')) lab.name = 'Vada Master (Noor bhai)';
+        if (lab.id === 'lab-3' || lab.name.includes('Priya')) lab.name = 'Counter / Cashier (Bala murugan)';
+      });
+      return parsed;
+    }
     return [
-      { id: 'lab-1', name: 'Tea Master (Ramesh)', wage: parsed.teaMaster || 400 },
-      { id: 'lab-2', name: 'Vada Master (Suresh)', wage: parsed.vadaMaster || 350 },
-      { id: 'lab-3', name: 'Counter / Cashier (Priya)', wage: 300 },
+      { id: 'lab-1', name: 'Tea Master (Ashok)', wage: 400 },
+      { id: 'lab-2', name: 'Vada Master (Noor bhai)', wage: 350 },
+      { id: 'lab-3', name: 'Counter / Cashier (Bala murugan)', wage: 300 },
       { id: 'lab-4', name: 'Cleaning & Maintenance (Murugan)', wage: 250 },
       { id: 'lab-5', name: 'Helper / Delivery (Karthik)', wage: 250 }
     ];
@@ -762,23 +786,16 @@ function showReceiptModal(bill) {
         </div>
       </div>
 
-      <!-- PhonePe UPI Payment QR Section -->
-      <div style="margin-top: 14px; padding: 12px; border: 2px solid #5f259f; border-radius: 12px; background: #FAF7FF; text-align: center;">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 6px;">
-          <div style="background: #5f259f; color: #ffffff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; font-family: sans-serif;">पे</div>
-          <span style="font-size: 1.1rem; font-weight: 800; color: #5f259f; font-family: sans-serif; letter-spacing: -0.5px;">PhonePe</span>
+      <!-- Simple Black & White UPI Payment QR Section -->
+      <div style="margin-top: 10px; padding-top: 10px; border-top: 2px dashed #000000; text-align: center;">
+        <div style="font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+          Scan & Pay via UPI
         </div>
-
-        <div style="background: #ffffff; padding: 8px; display: inline-block; border-radius: 8px; border: 1px solid #e2e8f0; margin: 4px 0;">
-          <img src="${qrImageUrl}" alt="PhonePe UPI QR Code" style="width: 150px; height: 150px; display: block; margin: 0 auto;" />
+        <div style="background: #ffffff; padding: 4px; display: inline-block; margin: 2px 0;">
+          <img src="${qrImageUrl}" alt="UPI QR Code" style="width: 140px; height: 140px; display: block; margin: 0 auto;" />
         </div>
-
-        <div style="font-size: 0.85rem; font-weight: 700; color: #0f172a; margin-top: 4px; font-family: monospace; letter-spacing: 0.2px;">
+        <div style="font-size: 0.85rem; font-weight: bold; color: #000000; margin-top: 4px; font-family: monospace;">
           UPI ID: Q516961806@ybl
-        </div>
-
-        <div style="margin-top: 6px; font-size: 0.7rem; font-weight: 700; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 4px;">
-          <span>BHIM | UPI</span> &bull; <span>Scan & Pay via Any UPI App</span>
         </div>
       </div>
 
