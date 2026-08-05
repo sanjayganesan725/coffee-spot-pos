@@ -1497,6 +1497,41 @@ function bindEvents() {
   });
   onEvent('ledgerSearchInput', 'oninput', renderCustomerLedger);
 
+// Web Bluetooth Printer Integration for 58mm Thermal Printers (e.g. KORES Endura PRP21)
+let btPrinterDevice = null;
+
+async function connectBluetoothPrinter() {
+  if (!navigator.bluetooth) {
+    alert('Web Bluetooth API is supported in Google Chrome (Android/Windows/Mac). For iOS or Safari, pair your KORES PRP21 in Phone Bluetooth Settings and click Print Receipt.');
+    return;
+  }
+  try {
+    showToast('🔍 Searching for KORES PRP21 Bluetooth Printer...');
+    btPrinterDevice = await navigator.bluetooth.requestDevice({
+      acceptAllDevices: true,
+      optionalServices: [
+        '000018f0-0000-1000-8000-00805f9b34fb',
+        '0000ff00-0000-1000-8000-00805f9b34fb',
+        '49535343-fe7d-4ae5-8fa9-9fafd205e455',
+        '00001101-0000-1000-8000-00805f9b34fb'
+      ]
+    });
+
+    await btPrinterDevice.gatt.connect();
+    const btn = $('connectBluetoothPrinterBtn');
+    if (btn) {
+      btn.textContent = `✅ Connected: ${btPrinterDevice.name || 'KORES PRP21'}`;
+      btn.style.background = '#166534';
+    }
+    showToast(`✅ Paired with ${btPrinterDevice.name || 'KORES PRP21 58mm Printer'}!`);
+  } catch (e) {
+    console.warn("Bluetooth pairing result:", e);
+    showToast('ℹ️ Bluetooth pairing closed.');
+  }
+}
+
+  onEvent('connectBluetoothPrinterBtn', 'onclick', connectBluetoothPrinter);
+
   onEvent('openExpensesBtn', 'onclick', () => {
     initExpensesView();
     openModal('expensesModal');
